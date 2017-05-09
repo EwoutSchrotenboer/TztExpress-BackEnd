@@ -1,0 +1,21 @@
+group 'nl.tzt-express.backend'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    testCompile "junit:junit:4.12"
+    compile "org.springframework.boot:spring-boot-starter-web:1.5.3.RELEASE"
+}
+
+jar {
+    baseName = 'tzt-express.backend'
+    version =  '0.1.0'
+}
