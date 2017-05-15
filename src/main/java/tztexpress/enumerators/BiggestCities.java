@@ -1,7 +1,7 @@
-package models;
+package tztexpress.enumerators;
 
 /**
- * Created by Ewout on 11-5-2017.
+ * The list of the 25 biggest cities in the Netherlands
  */
 public enum BiggestCities {
     // https://nl.wikipedia.org/wiki/Lijst_van_grootste_gemeenten_in_Nederland
