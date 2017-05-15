@@ -9,6 +9,8 @@ If you've set up Docker and gradle you can run the project as followed:
 1. `docker-compose up db`
 2. `gradle build`
 
+To run the application you should use `gradle bootRun`.
+
 [docker]: https://www.docker.com/
 [gradle]: https://gradle.org/
 [toolbox]: https://www.docker.com/docker-toolbox
