@@ -1,4 +1,4 @@
-package models;
+package tztexpress.models;
 
 /**
  * Created by Ewout on 11-5-2017.
