@@ -10,7 +10,7 @@ buildscript {
 	}
 }
 
-group 'nl.tzt-express.backend'
+group 'nl.tzt-express'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
@@ -32,6 +32,6 @@ dependencies {
 }
 
 jar {
-    baseName = 'tzt-express.backend'
+    baseName = 'tzt-express'
     version =  '0.1.0'
 }
