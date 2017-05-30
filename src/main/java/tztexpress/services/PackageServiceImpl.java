@@ -1,6 +1,6 @@
 package tztexpress.services;
 
-import tztexpress.model.Package;
+import tztexpress.models.Package;
 import tztexpress.repositories.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,7 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public Package getById(Long id) {
+
         return packageRepository.findOne(id);
     }
 

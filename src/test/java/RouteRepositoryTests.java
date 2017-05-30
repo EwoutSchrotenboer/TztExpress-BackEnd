@@ -1,15 +1,18 @@
+import com.google.maps.errors.ApiException;
 import tztexpress.models.CourierChoiceModel;
 import tztexpress.enumerators.CourierTypes;
 import org.junit.Assert;
 import org.junit.Test;
 import tztexpress.repositories.RouteRepository;
 
+import java.io.IOException;
+
 /**
  * Created by Ewout on 11-5-2017.
  */
 public class RouteRepositoryTests {
     @Test
-    public void CalculateTrainRoute() {
+    public void CalculateTrainRoute() throws InterruptedException, ApiException, IOException {
         // arrange
         RouteRepository testRouteRepository = new RouteRepository();
         String origin = "Campus 2-6, 8017 CA Zwolle, Netherlands";
@@ -23,7 +26,7 @@ public class RouteRepositoryTests {
     }
 
     @Test
-    public void CalculateTransportRoute() {
+    public void CalculateTransportRoute() throws InterruptedException, ApiException, IOException {
         // arrange
         RouteRepository testRouteRepository = new RouteRepository();
         String origin = "Campus 2-6, 8017 CA Zwolle, Netherlands";
