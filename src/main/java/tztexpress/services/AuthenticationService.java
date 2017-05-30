@@ -47,12 +47,25 @@ public class AuthenticationService {
         DateTime timestamp = DateTime.parse(timestampString);
 
         if (((DateTime.now().getMillis() - timestamp.getMillis()) / (60 * 1000) % 60) < 30 ) {
-            // TODO: Verify the database account information
-            //if(this.databaseRepository.VerifyLogin(username, password)) {
-            return true;
-            //}
+
         }
 
         return false;
+    }
+
+    public String CreateToken(String userName, String password) throws UnsupportedEncodingException {
+        String authString = userName + ":" + password + ":" + DateTime.now();
+
+        byte[] encodedString = Base64.encodeBase64(authString.getBytes());
+
+        String returnValue;
+
+        try {
+            returnValue = new String(encodedString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw e;
+        }
+
+        return returnValue;
     }
 }

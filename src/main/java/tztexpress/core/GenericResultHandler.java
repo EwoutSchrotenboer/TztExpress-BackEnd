@@ -13,11 +13,11 @@ public class GenericResultHandler {
     /**
      * Returns the generic result for the given class, this is usually inferred from the method that is called
      * @param model the model (inherited from BaseModel)
-     * @param <TModel> the model type
+     * @param <T> the model type
      * @return a generic result with success-boolean and the created model
      */
-    public static <TModel extends BaseModel> GenericResult<TModel> GenericResult(TModel model) {
-        GenericResult<TModel> returnValue = new GenericResult<>();
+    public static <T> GenericResult<T> GenericResult(T model) {
+        GenericResult<T> returnValue = new GenericResult<>();
         returnValue.IsSuccess = true;
         returnValue.Model = model;
         return returnValue;
@@ -27,10 +27,10 @@ public class GenericResultHandler {
      * Overload of the GenericExceptionResult method, with a string as input instead of the full exception
      * This way, exceptions can be thrown easier if a check does not succeed
      * @param exceptionString the message for the Exception
-     * @param <TModel> type of the model that would have been returned if it was successful
+     * @param <T> type of the model that would have been returned if it was successful
      * @return the exceptionmessage, with included stacktrace and exception if in debugmode.
      */
-    public static <TModel extends BaseModel> GenericResult<TModel> GenericExceptionResult(String exceptionString) {
+    public static <T> GenericResult<T> GenericExceptionResult(String exceptionString) {
         // TODO: Create Tzt-Specific Invalid Operation/Invalid Data exception
         Exception ex = new Exception(exceptionString);
         return GenericExceptionResult(ex);
@@ -41,11 +41,11 @@ public class GenericResultHandler {
      * Returns the exception in its own model, with an IsSuccess = false. In debugmode the full stacktrace
      * and the exception are added. Otherwise, a message is shown.
      * @param ex the thrown exception
-     * @param <TModel> the type of the model that would have been returned if it was successful.
+     * @param <T> the type of the model that would have been returned if it was successful.
      * @return The exceptionmessage, with included stacktrace and exception if in debugmode.
      */
-    public static <TModel extends BaseModel> GenericResult<TModel> GenericExceptionResult(Exception ex) {
-        GenericResult<TModel> returnValue = new GenericResult<>();
+    public static <T> GenericResult<T> GenericExceptionResult(Exception ex) {
+        GenericResult<T> returnValue = new GenericResult<>();
         returnValue.IsSuccess = false;
 
         ExceptionModel exModel = new ExceptionModel();
