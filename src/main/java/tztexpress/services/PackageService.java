@@ -1,6 +1,6 @@
 package tztexpress.services;
 
-import tztexpress.model.Package;
+import tztexpress.models.Package;
 
 import java.util.List;
 

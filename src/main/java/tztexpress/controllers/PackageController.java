@@ -1,6 +1,6 @@
 package tztexpress.controllers;
 
-import tztexpress.model.Package;
+import tztexpress.models.Package;
 import tztexpress.services.PackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

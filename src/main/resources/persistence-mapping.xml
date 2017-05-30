@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="tztexpress.models.AddressDbModel" table="Address" schema="public" catalog="tztexpress">
+        <id name="id" column="Id"/>
+        <property name="address1" column="Address1"/>
+        <property name="address2" column="Address2"/>
+        <property name="zipcode" column="Zipcode"/>
+        <property name="city" column="City"/>
+    </class>
+    <class name="tztexpress.models.ExternalcourierDbModel" table="Externalcourier" schema="public"
+           catalog="tztexpress">
+        <id name="id" column="Id"/>
+        <property name="companyname" column="Companyname"/>
+    </class>
+    <class name="tztexpress.models.PackageDbModel" table="Package" schema="public" catalog="tztexpress">
+        <id name="id" column="Id"/>
+        <property name="weight" column="Weight"/>
+        <property name="value" column="Value"/>
+        <property name="details" column="Details"/>
+        <many-to-one name="addressByOriginAddressId" class="tztexpress.models.AddressDbModel">
+            <column name="OriginAddressId"/>
+        </many-to-one>
+        <many-to-one name="addressByDestinationAddressId" class="tztexpress.models.AddressDbModel">
+            <column name="DestinationAddressId"/>
+        </many-to-one>
+    </class>
+    <class name="tztexpress.models.RouteDbModel" table="Route" schema="public" catalog="tztexpress">
+        <id name="id" column="Id"/>
+        <property name="origin" column="Origin"/>
+        <property name="destination" column="Destination"/>
+    </class>
+    <class name="tztexpress.models.ShipmentDbModel" table="Shipment" schema="public" catalog="tztexpress">
+        <id name="id" column="Id"/>
+        <property name="cost" column="Cost"/>
+        <property name="couriertype" column="Couriertype"/>
+        <many-to-one name="addressByOriginAddressId" class="tztexpress.models.AddressDbModel">
+            <column name="OriginAddressId"/>
+        </many-to-one>
+        <many-to-one name="addressByDestinationAddressId" class="tztexpress.models.AddressDbModel">
+            <column name="DestinationAddressId"/>
+        </many-to-one>
+        <many-to-one name="packageByPackageId" class="tztexpress.models.PackageDbModel">
+            <column name="PackageId"/>
+        </many-to-one>
+        <many-to-one name="externalcourierByExternalcourierId" class="tztexpress.models.ExternalcourierDbModel">
+            <column name="ExternalcourierId" not-null="true"/>
+        </many-to-one>
+    </class>
+    <class name="tztexpress.models.TraincourierDbModel" table="Traincourier" schema="public" catalog="tztexpress">
+        <id name="id" column="Id"/>
+        <property name="vogApproved" column="VogApproved"/>
+        <property name="identification" column="Identification"/>
+    </class>
+    <class name="tztexpress.models.TraincourierRouteDbModel" table="TraincourierRoute" schema="public"
+           catalog="tztexpress">
+        <id name="id" column="Id"/>
+        <property name="day" column="Day"/>
+        <many-to-one name="routeByRouteId" class="tztexpress.models.RouteDbModel">
+            <column name="RouteId"/>
+        </many-to-one>
+    </class>
+    <class name="tztexpress.models.UserDbModel" table="User" schema="public" catalog="tztexpress">
+        <id name="id" column="Id"/>
+        <property name="firstName" column="FirstName"/>
+        <property name="lastName" column="LastName"/>
+        <property name="prefix" column="Prefix"/>
+        <property name="password" column="Password"/>
+        <property name="email" column="Email"/>
+        <property name="isEmployee" column="IsEmployee"/>
+        <many-to-one name="addressByAddressId" class="tztexpress.models.AddressDbModel">
+            <column name="AddressId"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

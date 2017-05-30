@@ -1,4 +1,4 @@
-package tztexpress.model;
+package tztexpress.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
