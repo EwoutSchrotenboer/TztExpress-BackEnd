@@ -4,6 +4,7 @@ import org.apache.tomcat.jni.Time;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.springframework.http.HttpHeaders;
+import sun.net.www.content.text.Generic;
 import tztexpress.core.GenericResultHandler;
 import tztexpress.models.*;
 import tztexpress.repositories.*;
@@ -36,39 +37,6 @@ public class RouteController {
             }
         } else {
             return GenericResultHandler.GenericExceptionResult("Authentication not valid");
-        }
-    }
-
-    @RequestMapping(value = "test", method = RequestMethod.POST)
-    public String testRequest(@RequestHeader HttpHeaders headers, @RequestBody RouteRequest request) {
-        String convertString = request.origin + request.destination;
-
-        String authString = request.origin + ":" + request.destination + ":" + DateTime.now();
-
-        byte[] encodedString = Base64.encodeBase64(authString.getBytes());
-
-        String returnValue;
-
-        try {
-             returnValue = new String(encodedString, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return "Error, no valid authenticationtoken";
-        }
-
-        return returnValue;
-
-
-    }
-
-    @RequestMapping(value = "auth", method = RequestMethod.POST)
-    public String testRequest2(@RequestHeader HttpHeaders headers, @RequestBody String request) {
-        // validate input with database
-        boolean isAuthenticated = this.authenticationService.ValidateToken(headers.getValuesAsList("Authentication"));
-
-        if (isAuthenticated) {
-            return "Authenticated";
-        } else {
-            return "Not authenticated";
         }
     }
 }
