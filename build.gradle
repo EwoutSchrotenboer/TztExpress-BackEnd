@@ -28,6 +28,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:1.5.3.RELEASE"
     compile 'com.google.maps:google-maps-services:0.1.20'
     runtime('org.postgresql:postgresql')
+		compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '1.5.3.RELEASE'
 	  testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
