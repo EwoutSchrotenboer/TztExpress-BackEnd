@@ -1,34 +1,54 @@
 package tztexpress.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+/**
+ * Created by Ewout on 1-6-2017.
+ */
 @Entity
 public class Externalcourier {
+    private Long id;
+    private String companyname;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
-  private String companyname;
+    @Id
+    @Column(name = "Id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="Externalcourier_Id_seq")
+    @SequenceGenerator(name="Externalcourier_Id_seq", sequenceName = "Externalcourier_Id_seq")
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public long getId() {
-    return id;
-  }
+    @Basic
+    @Column(name = "Companyname", nullable = false, length = 255)
+    public String getCompanyname() {
+        return companyname;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-  public String getCompanyname() {
-    return companyname;
-  }
+        Externalcourier that = (Externalcourier) o;
 
-  public void setCompanyname(String companyname) {
-    this.companyname = companyname;
-  }
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (companyname != null ? !companyname.equals(that.companyname) : that.companyname != null) return false;
 
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (companyname != null ? companyname.hashCode() : 0);
+        return result;
+    }
 }
