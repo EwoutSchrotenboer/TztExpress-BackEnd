@@ -6,7 +6,6 @@ import tztexpress.core.GenericResultHandler;
 import tztexpress.models.ExceptionModel;
 import tztexpress.models.GenericResult;
 import tztexpress.models.RouteRequest;
-import tztexpress.repositories.RouteRepository;
 import tztexpress.services.AuthenticationService;
 
 import java.io.UnsupportedEncodingException;
@@ -30,7 +29,7 @@ public class AuthenticationController {
     @RequestMapping(value = "auth", method = RequestMethod.POST)
     public String testRequest2(@RequestHeader HttpHeaders headers, @RequestBody String request) {
         // validate input with database
-        boolean isAuthenticated = this.authenticationService.ValidateToken(headers.getValuesAsList("Authentication"));
+        boolean isAuthenticated = AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"));
 
         if (isAuthenticated) {
             return "Authenticated";
