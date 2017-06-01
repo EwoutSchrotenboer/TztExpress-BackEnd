@@ -12,7 +12,7 @@ public class AuthenticationService {
 
     // Hacky hacky hack, very fragile, treat with care
     // TODO: If everything is validated, return a new token.
-    public boolean ValidateToken(List<String> authentication) {
+    public static boolean ValidateToken(List<String> authentication) {
         if (authentication.size() != 1) {
             return false;
         }
@@ -46,14 +46,15 @@ public class AuthenticationService {
 
         DateTime timestamp = DateTime.parse(timestampString);
 
-        if (((DateTime.now().getMillis() - timestamp.getMillis()) / (60 * 1000) % 60) < 30 ) {
-
+        if (((DateTime.now().getMillis() - timestamp.getMillis()) / (60 * 1000) % 60) > 30 ) {
+            return false;
         }
 
+        // TODO: DB AUTH
         return false;
     }
 
-    public String CreateToken(String userName, String password) throws UnsupportedEncodingException {
+    public static String CreateToken(String userName, String password) throws UnsupportedEncodingException {
         String authString = userName + ":" + password + ":" + DateTime.now();
 
         byte[] encodedString = Base64.encodeBase64(authString.getBytes());
