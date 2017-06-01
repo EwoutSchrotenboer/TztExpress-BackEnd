@@ -1,94 +1,137 @@
 package tztexpress.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+/**
+ * Created by Ewout on 1-6-2017.
+ */
 @Entity
 public class Shipment {
+    private Long id;
+    private Long originAddressId;
+    private Long destinationAddressId;
+    private String cost;
+    private Long packageId;
+    private String couriertype;
+    private Long traincourierId;
+    private Long externalcourierId;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
-  private long originaddressid;
-  private long destinationaddressid;
-  private String cost;
-  private long packageid;
-  private String couriertype;
-  private long traincourierid;
-  private long externalcourierid;
+    @Id
+    @Column(name = "Id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="Shipment_Id_seq")
+    @SequenceGenerator(name="Shipment_Id_seq", sequenceName = "Shipment_Id_seq")
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public long getId() {
-    return id;
-  }
+    @Basic
+    @Column(name = "Originaddressid", nullable = false)
+    public Long getOriginAddressId() {
+        return originAddressId;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setOriginAddressId(Long originAddressId) {
+        this.originAddressId = originAddressId;
+    }
 
+    @Basic
+    @Column(name = "Destinationaddressid", nullable = false)
+    public Long getDestinationAddressId() {
+        return destinationAddressId;
+    }
 
-  public long getOriginaddressid() {
-    return originaddressid;
-  }
+    public void setDestinationAddressId(Long destinationAddressId) {
+        this.destinationAddressId = destinationAddressId;
+    }
 
-  public void setOriginaddressid(long originaddressid) {
-    this.originaddressid = originaddressid;
-  }
+    @Basic
+    @Column(name = "Cost", nullable = false, length = 255)
+    public String getCost() {
+        return cost;
+    }
 
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
 
-  public long getDestinationaddressid() {
-    return destinationaddressid;
-  }
+    @Basic
+    @Column(name = "Packageid", nullable = false)
+    public Long getPackageId() {
+        return packageId;
+    }
 
-  public void setDestinationaddressid(long destinationaddressid) {
-    this.destinationaddressid = destinationaddressid;
-  }
+    public void setPackageId(Long packageId) {
+        this.packageId = packageId;
+    }
 
+    @Basic
+    @Column(name = "Couriertype", nullable = false, length = 255)
+    public String getCouriertype() {
+        return couriertype;
+    }
 
-  public String getCost() {
-    return cost;
-  }
+    public void setCouriertype(String couriertype) {
+        this.couriertype = couriertype;
+    }
 
-  public void setCost(String cost) {
-    this.cost = cost;
-  }
+    @Basic
+    @Column(name = "Traincourierid", nullable = true)
+    public Long getTraincourierId() {
+        return traincourierId;
+    }
 
+    public void setTraincourierId(Long traincourierId) {
+        this.traincourierId = traincourierId;
+    }
 
-  public long getPackageid() {
-    return packageid;
-  }
+    @Basic
+    @Column(name = "Externalcourierid", nullable = true)
+    public Long getExternalcourierId() {
+        return externalcourierId;
+    }
 
-  public void setPackageid(long packageid) {
-    this.packageid = packageid;
-  }
+    public void setExternalcourierId(Long externalcourierId) {
+        this.externalcourierId = externalcourierId;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-  public String getCouriertype() {
-    return couriertype;
-  }
+        Shipment shipment = (Shipment) o;
 
-  public void setCouriertype(String couriertype) {
-    this.couriertype = couriertype;
-  }
+        if (id != null ? !id.equals(shipment.id) : shipment.id != null) return false;
+        if (originAddressId != null ? !originAddressId.equals(shipment.originAddressId) : shipment.originAddressId != null)
+            return false;
+        if (destinationAddressId != null ? !destinationAddressId.equals(shipment.destinationAddressId) : shipment.destinationAddressId != null)
+            return false;
+        if (cost != null ? !cost.equals(shipment.cost) : shipment.cost != null) return false;
+        if (packageId != null ? !packageId.equals(shipment.packageId) : shipment.packageId != null) return false;
+        if (couriertype != null ? !couriertype.equals(shipment.couriertype) : shipment.couriertype != null)
+            return false;
+        if (traincourierId != null ? !traincourierId.equals(shipment.traincourierId) : shipment.traincourierId != null)
+            return false;
+        if (externalcourierId != null ? !externalcourierId.equals(shipment.externalcourierId) : shipment.externalcourierId != null)
+            return false;
 
+        return true;
+    }
 
-  public long getTraincourierid() {
-    return traincourierid;
-  }
-
-  public void setTraincourierid(long traincourierid) {
-    this.traincourierid = traincourierid;
-  }
-
-
-  public long getExternalcourierid() {
-    return externalcourierid;
-  }
-
-  public void setExternalcourierid(long externalcourierid) {
-    this.externalcourierid = externalcourierid;
-  }
-
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (originAddressId != null ? originAddressId.hashCode() : 0);
+        result = 31 * result + (destinationAddressId != null ? destinationAddressId.hashCode() : 0);
+        result = 31 * result + (cost != null ? cost.hashCode() : 0);
+        result = 31 * result + (packageId != null ? packageId.hashCode() : 0);
+        result = 31 * result + (couriertype != null ? couriertype.hashCode() : 0);
+        result = 31 * result + (traincourierId != null ? traincourierId.hashCode() : 0);
+        result = 31 * result + (externalcourierId != null ? externalcourierId.hashCode() : 0);
+        return result;
+    }
 }

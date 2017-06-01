@@ -1,9 +1,8 @@
 package tztexpress.services;
 
-import tztexpress.models.User;
-import tztexpress.repositories.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tztexpress.models.User;
 import tztexpress.repositories.UserRepository;
 
 import java.util.ArrayList;

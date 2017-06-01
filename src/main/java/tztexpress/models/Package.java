@@ -1,75 +1,108 @@
 package tztexpress.models;
 
+import javax.persistence.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+/**
+ * Created by Ewout on 1-6-2017.
+ */
 @Entity
 public class Package {
+    private Long id;
+    private Long originAddressId;
+    private Long destinationAddressId;
+    private Long weight;
+    private String value;
+    private String details;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
-  private long originaddressid;
-  private long destinationaddressid;
-  private long weight;
-  private String value;
-  private String details;
+    @Id
+    @Column(name = "Id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="Package_Id_seq")
+    @SequenceGenerator(name="Package_Id_seq", sequenceName = "Package_Id_seq")
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public long getId() {
-    return id;
-  }
+    @Basic
+    @Column(name = "Originaddressid", nullable = false)
+    public Long getOriginAddressId() {
+        return originAddressId;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setOriginAddressId(Long originAddressId) {
+        this.originAddressId = originAddressId;
+    }
 
+    @Basic
+    @Column(name = "Destinationaddressid", nullable = false)
+    public Long getDestinationAddressId() {
+        return destinationAddressId;
+    }
 
-  public long getOriginaddressid() {
-    return originaddressid;
-  }
+    public void setDestinationAddressId(Long destinationAddressId) {
+        this.destinationAddressId = destinationAddressId;
+    }
 
-  public void setOriginaddressid(long originaddressid) {
-    this.originaddressid = originaddressid;
-  }
+    @Basic
+    @Column(name = "Weight", nullable = false)
+    public Long getWeight() {
+        return weight;
+    }
 
+    public void setWeight(Long weight) {
+        this.weight = weight;
+    }
 
-  public long getDestinationaddressid() {
-    return destinationaddressid;
-  }
+    @Basic
+    @Column(name = "Value", nullable = false, length = 255)
+    public String getValue() {
+        return value;
+    }
 
-  public void setDestinationaddressid(long destinationaddressid) {
-    this.destinationaddressid = destinationaddressid;
-  }
+    public void setValue(String value) {
+        this.value = value;
+    }
 
+    @Basic
+    @Column(name = "Details", nullable = true, length = 255)
+    public String getDetails() {
+        return details;
+    }
 
-  public long getWeight() {
-    return weight;
-  }
+    public void setDetails(String details) {
+        this.details = details;
+    }
 
-  public void setWeight(long weight) {
-    this.weight = weight;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Package aPackage = (Package) o;
 
-  public String getValue() {
-    return value;
-  }
+        if (id != null ? !id.equals(aPackage.id) : aPackage.id != null) return false;
+        if (originAddressId != null ? !originAddressId.equals(aPackage.originAddressId) : aPackage.originAddressId != null)
+            return false;
+        if (destinationAddressId != null ? !destinationAddressId.equals(aPackage.destinationAddressId) : aPackage.destinationAddressId != null)
+            return false;
+        if (weight != null ? !weight.equals(aPackage.weight) : aPackage.weight != null) return false;
+        if (value != null ? !value.equals(aPackage.value) : aPackage.value != null) return false;
+        if (details != null ? !details.equals(aPackage.details) : aPackage.details != null) return false;
 
-  public void setValue(String value) {
-    this.value = value;
-  }
+        return true;
+    }
 
-
-  public String getDetails() {
-    return details;
-  }
-
-  public void setDetails(String details) {
-    this.details = details;
-  }
-
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (originAddressId != null ? originAddressId.hashCode() : 0);
+        result = 31 * result + (destinationAddressId != null ? destinationAddressId.hashCode() : 0);
+        result = 31 * result + (weight != null ? weight.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + (details != null ? details.hashCode() : 0);
+        return result;
+    }
 }

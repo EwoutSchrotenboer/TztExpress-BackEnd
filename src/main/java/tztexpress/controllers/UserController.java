@@ -1,8 +1,5 @@
 package tztexpress.controllers;
 
-import tztexpress.models.Package;
-import tztexpress.models.User;
-import tztexpress.services.IPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import tztexpress.models.User;
 import tztexpress.services.IUserService;
 
 import java.util.List;
@@ -36,6 +34,7 @@ public class UserController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public @ResponseBody User saveOrUpdateUser(@RequestBody User user){
+        user.setEmployee(false);
         return userService.saveOrUpdate(user);
     }
 

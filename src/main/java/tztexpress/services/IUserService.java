@@ -1,6 +1,5 @@
 package tztexpress.services;
 
-import tztexpress.models.Package;
 import tztexpress.models.User;
 
 import java.util.List;
