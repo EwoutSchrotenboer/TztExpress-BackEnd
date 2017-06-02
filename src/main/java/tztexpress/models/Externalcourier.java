@@ -6,12 +6,13 @@ import javax.persistence.*;
  * Created by Ewout on 1-6-2017.
  */
 @Entity
+@Table(name="`externalcourier`")
 public class Externalcourier {
     private Long id;
     private String companyname;
 
     @Id
-    @Column(name = "Id", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator="Externalcourier_Id_seq")
     @SequenceGenerator(name="Externalcourier_Id_seq", sequenceName = "Externalcourier_Id_seq")
     public Long getId() {
@@ -23,7 +24,7 @@ public class Externalcourier {
     }
 
     @Basic
-    @Column(name = "Companyname", nullable = false, length = 255)
+    @Column(name = "companyname", nullable = false, length = 255)
     public String getCompanyname() {
         return companyname;
     }

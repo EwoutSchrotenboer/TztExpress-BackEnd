@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by Ewout on 1-6-2017.
  */
 @Entity
+@Table(name="`traincourierroute`")
 public class TraincourierRoute {
     private Long id;
     private String day;
@@ -13,7 +14,7 @@ public class TraincourierRoute {
     private Long routeId;
 
     @Id
-    @Column(name = "Id", nullable = false)
+    @Column(name = "i", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator="TraincourierRoute_Id_seq")
     @SequenceGenerator(name="TraincourierRoute_Id_seq", sequenceName = "TraincourierRoute_Id_seq")
     public Long getId() {
@@ -25,7 +26,7 @@ public class TraincourierRoute {
     }
 
     @Basic
-    @Column(name = "Day", nullable = false, length = 50)
+    @Column(name = "day", nullable = false, length = 50)
     public String getDay() {
         return day;
     }
@@ -35,7 +36,7 @@ public class TraincourierRoute {
     }
 
     @Basic
-    @Column(name = "Traincourierid", nullable = false)
+    @Column(name = "traincourierid", nullable = false)
     public Long getTraincourierId() {
         return traincourierId;
     }
@@ -45,7 +46,7 @@ public class TraincourierRoute {
     }
 
     @Basic
-    @Column(name = "Routeid", nullable = false)
+    @Column(name = "routeid", nullable = false)
     public Long getRouteId() {
         return routeId;
     }

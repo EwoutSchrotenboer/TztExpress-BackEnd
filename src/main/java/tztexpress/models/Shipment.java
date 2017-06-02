@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by Ewout on 1-6-2017.
  */
 @Entity
+@Table(name="`shipment`")
 public class Shipment {
     private Long id;
     private Long originAddressId;
@@ -17,7 +18,7 @@ public class Shipment {
     private Long externalcourierId;
 
     @Id
-    @Column(name = "Id", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator="Shipment_Id_seq")
     @SequenceGenerator(name="Shipment_Id_seq", sequenceName = "Shipment_Id_seq")
     public Long getId() {
@@ -29,7 +30,7 @@ public class Shipment {
     }
 
     @Basic
-    @Column(name = "Originaddressid", nullable = false)
+    @Column(name = "originaddressid", nullable = false)
     public Long getOriginAddressId() {
         return originAddressId;
     }
@@ -39,7 +40,7 @@ public class Shipment {
     }
 
     @Basic
-    @Column(name = "Destinationaddressid", nullable = false)
+    @Column(name = "destinationaddressid", nullable = false)
     public Long getDestinationAddressId() {
         return destinationAddressId;
     }
@@ -49,7 +50,7 @@ public class Shipment {
     }
 
     @Basic
-    @Column(name = "Cost", nullable = false, length = 255)
+    @Column(name = "cost", nullable = false, length = 255)
     public String getCost() {
         return cost;
     }
@@ -59,7 +60,7 @@ public class Shipment {
     }
 
     @Basic
-    @Column(name = "Packageid", nullable = false)
+    @Column(name = "packageid", nullable = false)
     public Long getPackageId() {
         return packageId;
     }
@@ -69,7 +70,7 @@ public class Shipment {
     }
 
     @Basic
-    @Column(name = "Couriertype", nullable = false, length = 255)
+    @Column(name = "couriertype", nullable = false, length = 255)
     public String getCouriertype() {
         return couriertype;
     }
@@ -79,7 +80,7 @@ public class Shipment {
     }
 
     @Basic
-    @Column(name = "Traincourierid", nullable = true)
+    @Column(name = "traincourierid", nullable = true)
     public Long getTraincourierId() {
         return traincourierId;
     }
@@ -89,7 +90,7 @@ public class Shipment {
     }
 
     @Basic
-    @Column(name = "Externalcourierid", nullable = true)
+    @Column(name = "externalcourierid", nullable = true)
     public Long getExternalcourierId() {
         return externalcourierId;
     }

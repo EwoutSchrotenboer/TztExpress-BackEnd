@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by Ewout on 1-6-2017.
  */
 @Entity
+@Table(name="`package`")
 public class Package {
     private Long id;
     private Long originAddressId;
@@ -15,7 +16,7 @@ public class Package {
     private String details;
 
     @Id
-    @Column(name = "Id", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator="Package_Id_seq")
     @SequenceGenerator(name="Package_Id_seq", sequenceName = "Package_Id_seq")
     public Long getId() {
@@ -27,7 +28,7 @@ public class Package {
     }
 
     @Basic
-    @Column(name = "Originaddressid", nullable = false)
+    @Column(name = "originaddressid", nullable = false)
     public Long getOriginAddressId() {
         return originAddressId;
     }
@@ -37,7 +38,7 @@ public class Package {
     }
 
     @Basic
-    @Column(name = "Destinationaddressid", nullable = false)
+    @Column(name = "destinationaddressid", nullable = false)
     public Long getDestinationAddressId() {
         return destinationAddressId;
     }
@@ -47,7 +48,7 @@ public class Package {
     }
 
     @Basic
-    @Column(name = "Weight", nullable = false)
+    @Column(name = "weight", nullable = false)
     public Long getWeight() {
         return weight;
     }
@@ -57,7 +58,7 @@ public class Package {
     }
 
     @Basic
-    @Column(name = "Value", nullable = false, length = 255)
+    @Column(name = "value", nullable = false, length = 255)
     public String getValue() {
         return value;
     }
@@ -67,7 +68,7 @@ public class Package {
     }
 
     @Basic
-    @Column(name = "Details", nullable = true, length = 255)
+    @Column(name = "details", nullable = true, length = 255)
     public String getDetails() {
         return details;
     }
