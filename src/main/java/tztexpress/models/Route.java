@@ -6,13 +6,14 @@ import javax.persistence.*;
  * Created by Ewout on 1-6-2017.
  */
 @Entity
+@Table(name="`route`")
 public class Route {
     private Long id;
     private String origin;
     private String destination;
 
     @Id
-    @Column(name = "Id", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator="Route_Id_seq")
     @SequenceGenerator(name="Route_Id_seq", sequenceName = "Route_Id_seq")
     public Long getId() {
@@ -24,7 +25,7 @@ public class Route {
     }
 
     @Basic
-    @Column(name = "Origin", nullable = false, length = 255)
+    @Column(name = "origin", nullable = false, length = 255)
     public String getOrigin() {
         return origin;
     }
@@ -34,7 +35,7 @@ public class Route {
     }
 
     @Basic
-    @Column(name = "Destination", nullable = false, length = 255)
+    @Column(name = "destination", nullable = false, length = 255)
     public String getDestination() {
         return destination;
     }

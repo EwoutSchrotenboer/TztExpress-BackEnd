@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by Ewout on 1-6-2017.
  */
 @Entity
+@Table(name="`user`")
 public class User {
     private Long id;
     private String firstName;
@@ -17,7 +18,7 @@ public class User {
     private Long addressId;
 
     @Id
-    @Column(name = "Id", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator="User_Id_seq")
     @SequenceGenerator(name="User_Id_seq", sequenceName = "User_Id_seq")
     public Long getId() {
@@ -29,7 +30,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "Firstname", nullable = false, length = 50)
+    @Column(name = "firstname", nullable = false, length = 50)
     public String getFirstName() {
         return firstName;
     }
@@ -39,7 +40,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "Lastname", nullable = false, length = 50)
+    @Column(name = "lastname", nullable = false, length = 50)
     public String getLastName() {
         return lastName;
     }
@@ -49,7 +50,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "Prefix", nullable = true, length = 30)
+    @Column(name = "prefix", nullable = true, length = 30)
     public String getPrefix() {
         return prefix;
     }
@@ -59,7 +60,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "Password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false, length = 255)
     public String getPassword() {
         return password;
     }
@@ -69,7 +70,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "Email", nullable = false, length = 255)
+    @Column(name = "email", nullable = false, length = 255)
     public String getEmail() {
         return email;
     }
@@ -79,7 +80,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "Isemployee", nullable = false)
+    @Column(name = "isemployee", nullable = false)
     public Boolean getEmployee() {
         return isEmployee;
     }
@@ -89,7 +90,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "Addressid", nullable = false)
+    @Column(name = "addressid", nullable = false)
     public Long getAddressId() {
         return addressId;
     }

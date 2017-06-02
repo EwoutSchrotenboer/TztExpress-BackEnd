@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by Ewout on 1-6-2017.
  */
 @Entity
+@Table(name="`address`")
 public class Address {
     private Long id;
     private String address1;
@@ -26,7 +27,7 @@ public class Address {
     }
 
     @Basic
-    @Column(name = "Address1", nullable = false, length = 255)
+    @Column(name = "address1", nullable = false, length = 255)
     public String getAddress1() {
         return address1;
     }
@@ -36,7 +37,7 @@ public class Address {
     }
 
     @Basic
-    @Column(name = "Address2", nullable = true, length = 255)
+    @Column(name = "address2", nullable = true, length = 255)
     public String getAddress2() {
         return address2;
     }
@@ -46,7 +47,7 @@ public class Address {
     }
 
     @Basic
-    @Column(name = "Zipcode", nullable = false, length = 10)
+    @Column(name = "zipcode", nullable = false, length = 10)
     public String getZipcode() {
         return zipcode;
     }
@@ -56,7 +57,7 @@ public class Address {
     }
 
     @Basic
-    @Column(name = "City", nullable = false, length = -1)
+    @Column(name = "city", nullable = false, length = -1)
     public String getCity() {
         return city;
     }
