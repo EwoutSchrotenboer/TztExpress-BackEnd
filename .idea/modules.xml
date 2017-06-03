@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tzt-express.backend.iml" filepath="$PROJECT_DIR$/.idea/modules/tzt-express.backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tzt-express.backend_main.iml" filepath="$PROJECT_DIR$/.idea/modules/tzt-express.backend_main.iml" group="tzt-express.backend" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tzt-express.backend_test.iml" filepath="$PROJECT_DIR$/.idea/modules/tzt-express.backend_test.iml" group="tzt-express.backend" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tzt-express.iml" filepath="$PROJECT_DIR$/.idea/modules/tzt-express.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tzt-express_main.iml" filepath="$PROJECT_DIR$/.idea/modules/tzt-express_main.iml" group="tzt-express" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tzt-express_test.iml" filepath="$PROJECT_DIR$/.idea/modules/tzt-express_test.iml" group="tzt-express" />
     </modules>
   </component>
 </project>
