@@ -1,21 +1,24 @@
-package tztexpress.model;
+package tztexpress.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.math.BigDecimal;
+import javax.persistence.*;
 
+/**
+ * Created by Ewout on 1-6-2017.
+ */
 @Entity
+@Table(name="`package`")
 public class Package {
+    private Long id;
+    private Long originAddressId;
+    private Long destinationAddressId;
+    private Long weight;
+    private String value;
+    private String details;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String description;
-    private BigDecimal price;
-    private String imageUrl;
-
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="Package_Id_seq")
+    @SequenceGenerator(name="Package_Id_seq", sequenceName = "Package_Id_seq")
     public Long getId() {
         return id;
     }
@@ -24,27 +27,83 @@ public class Package {
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    @Basic
+    @Column(name = "originaddressid", nullable = false)
+    public Long getOriginAddressId() {
+        return originAddressId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setOriginAddressId(Long originAddressId) {
+        this.originAddressId = originAddressId;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    @Basic
+    @Column(name = "destinationaddressid", nullable = false)
+    public Long getDestinationAddressId() {
+        return destinationAddressId;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setDestinationAddressId(Long destinationAddressId) {
+        this.destinationAddressId = destinationAddressId;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    @Basic
+    @Column(name = "weight", nullable = false)
+    public Long getWeight() {
+        return weight;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setWeight(Long weight) {
+        this.weight = weight;
+    }
+
+    @Basic
+    @Column(name = "value", nullable = false, length = 255)
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Basic
+    @Column(name = "details", nullable = true, length = 255)
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Package aPackage = (Package) o;
+
+        if (id != null ? !id.equals(aPackage.id) : aPackage.id != null) return false;
+        if (originAddressId != null ? !originAddressId.equals(aPackage.originAddressId) : aPackage.originAddressId != null)
+            return false;
+        if (destinationAddressId != null ? !destinationAddressId.equals(aPackage.destinationAddressId) : aPackage.destinationAddressId != null)
+            return false;
+        if (weight != null ? !weight.equals(aPackage.weight) : aPackage.weight != null) return false;
+        if (value != null ? !value.equals(aPackage.value) : aPackage.value != null) return false;
+        if (details != null ? !details.equals(aPackage.details) : aPackage.details != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (originAddressId != null ? originAddressId.hashCode() : 0);
+        result = 31 * result + (destinationAddressId != null ? destinationAddressId.hashCode() : 0);
+        result = 31 * result + (weight != null ? weight.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + (details != null ? details.hashCode() : 0);
+        return result;
     }
 }

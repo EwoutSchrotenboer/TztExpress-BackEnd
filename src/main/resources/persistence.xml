@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+        version="2.0">
+
+    <entity class="tztexpress.models.Address">
+        <table name="Address" schema="public" catalog="tztexpress"/>
+        <attributes>
+            <id name="id">
+                <column name="Id" precision="-1"/>
+            </id>
+            <basic name="address1">
+                <column name="Address1"/>
+            </basic>
+            <basic name="address2">
+                <column name="Address2" nullable="false"/>
+            </basic>
+            <basic name="zipcode">
+                <column name="Zipcode" length="10"/>
+            </basic>
+            <basic name="city">
+                <column name="City"/>
+            </basic>
+        </attributes>
+    </entity>
+    <entity class="tztexpress.models.Externalcourier">
+        <table name="Externalcourier" schema="public" catalog="tztexpress"/>
+        <attributes>
+            <id name="id">
+                <column name="Id" precision="-1"/>
+            </id>
+            <basic name="companyname">
+                <column name="Companyname"/>
+            </basic>
+        </attributes>
+    </entity>
+    <entity class="tztexpress.models.Package">
+        <table name="Package" schema="public" catalog="tztexpress"/>
+        <attributes>
+            <id name="id">
+                <column name="Id" precision="-1"/>
+            </id>
+            <basic name="originAddressId">
+                <column name="OriginAddressId" precision="-1"/>
+            </basic>
+            <basic name="destinationAddressId">
+                <column name="DestinationAddressId" precision="-1"/>
+            </basic>
+            <basic name="weight">
+                <column name="Weight" precision="-1"/>
+            </basic>
+            <basic name="value">
+                <column name="Value"/>
+            </basic>
+            <basic name="details">
+                <column name="Details" nullable="false"/>
+            </basic>
+        </attributes>
+    </entity>
+    <entity class="tztexpress.models.Route">
+        <table name="Route" schema="public" catalog="tztexpress"/>
+        <attributes>
+            <id name="id">
+                <column name="Id" precision="-1"/>
+            </id>
+            <basic name="origin">
+                <column name="Origin"/>
+            </basic>
+            <basic name="destination">
+                <column name="Destination"/>
+            </basic>
+        </attributes>
+    </entity>
+    <entity class="tztexpress.models.Shipment">
+        <table name="Shipment" schema="public" catalog="tztexpress"/>
+        <attributes>
+            <id name="id">
+                <column name="Id" precision="-1"/>
+            </id>
+            <basic name="originAddressId">
+                <column name="OriginAddressId" precision="-1"/>
+            </basic>
+            <basic name="destinationAddressId">
+                <column name="DestinationAddressId" precision="-1"/>
+            </basic>
+            <basic name="cost">
+                <column name="Cost"/>
+            </basic>
+            <basic name="packageId">
+                <column name="PackageId" precision="-1"/>
+            </basic>
+            <basic name="couriertype">
+                <column name="Couriertype"/>
+            </basic>
+            <basic name="traincourierId">
+                <column name="TraincourierId" nullable="false" precision="-1"/>
+            </basic>
+            <basic name="externalcourierId">
+                <column name="ExternalcourierId" nullable="false" precision="-1"/>
+            </basic>
+        </attributes>
+    </entity>
+    <entity class="tztexpress.models.Traincourier">
+        <table name="Traincourier" schema="public" catalog="tztexpress"/>
+        <attributes>
+            <id name="id">
+                <column name="Id" precision="-1"/>
+            </id>
+            <basic name="vogApproved">
+                <column name="VogApproved" precision="-1"/>
+            </basic>
+            <basic name="identification">
+                <column name="Identification"/>
+            </basic>
+            <basic name="userId">
+                <column name="UserId" precision="-1"/>
+            </basic>
+        </attributes>
+    </entity>
+    <entity class="tztexpress.models.TraincourierRoute">
+        <table name="TraincourierRoute" schema="public" catalog="tztexpress"/>
+        <attributes>
+            <id name="id">
+                <column name="Id" precision="-1"/>
+            </id>
+            <basic name="day">
+                <column name="Day" length="50"/>
+            </basic>
+            <basic name="traincourierId">
+                <column name="TraincourierId" precision="-1"/>
+            </basic>
+            <basic name="routeId">
+                <column name="RouteId" precision="-1"/>
+            </basic>
+        </attributes>
+    </entity>
+    <entity class="tztexpress.models.User">
+        <table name="User" schema="public" catalog="tztexpress"/>
+        <attributes>
+            <id name="id">
+                <column name="Id" precision="-1"/>
+            </id>
+            <basic name="firstName">
+                <column name="FirstName" length="50"/>
+            </basic>
+            <basic name="lastName">
+                <column name="LastName" length="50"/>
+            </basic>
+            <basic name="prefix">
+                <column name="Prefix" nullable="false" length="30"/>
+            </basic>
+            <basic name="password">
+                <column name="Password"/>
+            </basic>
+            <basic name="email">
+                <column name="Email"/>
+            </basic>
+            <basic name="isEmployee">
+                <column name="IsEmployee" precision="-1"/>
+            </basic>
+            <basic name="addressId">
+                <column name="AddressId" precision="-1"/>
+            </basic>
+        </attributes>
+    </entity>
+</entity-mappings>

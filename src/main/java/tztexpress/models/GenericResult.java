@@ -3,8 +3,8 @@ package tztexpress.models;
 /**
  * Created by Ewout on 14-5-2017.
  */
-public class GenericResult<TModel> {
+public class GenericResult<T> {
     public boolean IsSuccess;
-    public TModel Model;
+    public T Model;
     public ExceptionModel Exception;
 }

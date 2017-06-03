@@ -4,6 +4,7 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
+import org.springframework.stereotype.Repository;
 import tztexpress.enumerators.BiggestCities;
 import tztexpress.enumerators.CourierTypes;
 import tztexpress.enumerators.Status;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * The routerepository contains the code for the handling of the routecalculations
  */
+@Repository
 public class RouteRepository {
     private GeoApiContext context = new GeoApiContext();
     private static final Double TRAINCOURIERPRICE = 6.0;
@@ -40,7 +42,7 @@ public class RouteRepository {
      * @param destination the destination address in string format
      * @return a CourierChoiceModel with status for the cheapest courier for the given route
      */
-    public CourierChoiceModel CalculateRoute(String origin, String destination) {
+    public CourierChoiceModel CalculateRoute(String origin, String destination) throws InterruptedException, ApiException, IOException {
         CourierChoiceModel returnValue = new CourierChoiceModel();
 
         CourierModel cheapestCourier = this.GetCheapestCourier(origin, destination, true);
@@ -55,7 +57,6 @@ public class RouteRepository {
             returnValue.OriginAddress = cheapestCourier.OriginAddress;
             returnValue.DestinationAddress = cheapestCourier.DestinationAddress;
         } else {
-            // TODO: Handle better than if/else
             returnValue.Status = Status.ERROR.toString();
             returnValue.AdditionalInformation = "Courier could not be calculated, please contact support.";
         }
@@ -72,7 +73,7 @@ public class RouteRepository {
      *                    an infinite loop for the train courier
      * @return a couriermodel for the cheapest courier for the given route
      */
-    private CourierModel GetCheapestCourier(String origin, String destination, boolean fullRoute) {
+    private CourierModel GetCheapestCourier(String origin, String destination, boolean fullRoute) throws InterruptedException, ApiException, IOException {
 
         DirectionsResult distanceBicycle = this.GetDistance(origin, destination, TravelMode.BICYCLING);
 
@@ -117,7 +118,7 @@ public class RouteRepository {
      * @param distanceTransit the DirectionsResult for the transit route
      * @return A couriermodel with the calculated prices for the parts of the routes as well as the total price
      */
-    private CourierModel TrainCourierRoute(DirectionsResult distanceTransit) {
+    private CourierModel TrainCourierRoute(DirectionsResult distanceTransit) throws InterruptedException, ApiException, IOException {
         CourierModel returnValue = new CourierModel(CourierTypes.TRAINCOURIER);
 
         String origin = distanceTransit.routes[0].legs[0].startAddress;
@@ -304,7 +305,7 @@ public class RouteRepository {
      * @param travelMode  the mode of travel (BICYCLING, DRIVING, TRANSIT, WALKING, UNKNOWN)
      * @return A Directionsresult containing the parsed JSON from the Google Maps API
      */
-    private DirectionsResult GetDistance(String origin, String destination, TravelMode travelMode) {
+    private DirectionsResult GetDistance(String origin, String destination, TravelMode travelMode) throws InterruptedException, ApiException, IOException {
         DirectionsResult returnValue = new DirectionsResult();
         try {
             returnValue = DirectionsApi.newRequest(context)
@@ -313,8 +314,8 @@ public class RouteRepository {
                     .mode(travelMode)
                     .await();
         } catch (ApiException | IOException | InterruptedException ex) {
-            // TODO: discuss error handling
-            return returnValue;
+            // TODO: Next implementation - add exceptionlogging to database
+            throw ex;
         }
 
         return returnValue;

@@ -1,19 +1,39 @@
 package tztexpress.services;
 
-import tztexpress.model.Package;
+import tztexpress.models.Package;
+import tztexpress.repositories.PackageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by jt on 1/10/17.
- */
-public interface PackageService {
+@Service
+public class PackageService {
 
-    List<Package> listAll();
+    private PackageRepository packageRepository;
 
-    Package getById(Long id);
+    @Autowired
+    public PackageService(PackageRepository packageRepository) {
+        this.packageRepository = packageRepository;
+    }
 
-    Package saveOrUpdate(Package _package);
+    public List<Package> listAll() {
+        List<Package> packages = new ArrayList<>();
+        packageRepository.findAll().forEach(packages::add);
+        return packages;
+    }
 
-    void delete(Long id);
+    public Package getById(Long id) {
+
+        return packageRepository.findOne(id);
+    }
+
+    public Package saveOrUpdate(Package _package) {
+        return packageRepository.save(_package);
+    }
+
+    public void delete(Long id) {
+        packageRepository.delete(id);
+    }
 }
