@@ -4,6 +4,7 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
+import org.springframework.stereotype.Repository;
 import tztexpress.enumerators.BiggestCities;
 import tztexpress.enumerators.CourierTypes;
 import tztexpress.enumerators.Status;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * The routerepository contains the code for the handling of the routecalculations
  */
+@Repository
 public class RouteRepository {
     private GeoApiContext context = new GeoApiContext();
     private static final Double TRAINCOURIERPRICE = 6.0;
