@@ -37,7 +37,7 @@ public class UserService {
     public User create(UserModelRequest userModel) throws InvalidDataException {
 
         // check if user exists in database
-        User user = userRepository.findByEmailAddress(userModel.email);
+        User user = userRepository.findByEmailAddress(userModel.email.toLowerCase());
 
         if (user != null) {
             throw new InvalidDataException("Email-address already exists in database.");
@@ -49,7 +49,7 @@ public class UserService {
         newUser.setLastName(userModel.lastName);
         newUser.setPrefix(userModel.prefix);
         newUser.setEmployee(userModel.isEmployee);
-        newUser.setEmail(userModel.email);
+        newUser.setEmail(userModel.email.toLowerCase());
 
         Address address = this.addressService.getAddress(userModel.address);
 
@@ -93,7 +93,7 @@ public class UserService {
     public User updatePassword(ChangePasswordRequest changePasswordRequest) throws InvalidDataException {
         boolean returnValue = false;
 
-        User user = userRepository.findByEmailAddress(changePasswordRequest.Email);
+        User user = userRepository.findByEmailAddress(changePasswordRequest.Email.toLowerCase());
 
         if (user == null) {
             throw new InvalidDataException("Email-address does not exist in database.");
@@ -112,7 +112,7 @@ public class UserService {
         returnValue.FirstName = user.getFirstName();
         returnValue.LastName = user.getLastName();
         returnValue.Prefix = user.getPrefix();
-        returnValue.Email = user.getEmail();
+        returnValue.Email = user.getEmail().toLowerCase();
         returnValue.AddressId = user.getAddressId();
 
         return returnValue;
