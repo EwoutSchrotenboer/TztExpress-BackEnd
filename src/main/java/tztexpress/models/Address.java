@@ -15,7 +15,7 @@ public class Address {
     private String city;
 
     @Id
-    @Column(name = "Id", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator="Address_Id_seq")
     @SequenceGenerator(name="Address_Id_seq", sequenceName = "Address_Id_seq")
     public Long getId() {
