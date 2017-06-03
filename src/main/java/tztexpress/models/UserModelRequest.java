@@ -9,5 +9,6 @@ public class UserModelRequest {
     public String prefix;
     public String password;
     public String email;
+    public AddressModel address;
     public boolean isEmployee;
 }

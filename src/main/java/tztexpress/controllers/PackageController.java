@@ -1,7 +1,6 @@
 package tztexpress.controllers;
 
 import tztexpress.models.Package;
-import tztexpress.services.IPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,16 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import tztexpress.services.PackageService;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/api/package")
 public class PackageController {
-    private IPackageService packageService;
+    private PackageService packageService;
 
     @Autowired
-    public void setPackageService(IPackageService packageService) {
+    public void setPackageService(PackageService packageService) {
         this.packageService = packageService;
     }
 

@@ -1,5 +1,6 @@
 package tztexpress.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import tztexpress.core.GenericResultHandler;
 import tztexpress.models.*;
@@ -10,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/route")
 public class RouteController {
-    private RouteRepository routeRepository = new RouteRepository();
-    private AuthenticationService authenticationService = new AuthenticationService();
+    private RouteRepository routeRepository;
+
+    @Autowired
+    public RouteController(RouteRepository routeRepository) {
+        this.routeRepository = routeRepository;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     public GenericResult<CourierChoiceModel> calculate(@RequestHeader HttpHeaders headers, @RequestBody RouteRequest request) {

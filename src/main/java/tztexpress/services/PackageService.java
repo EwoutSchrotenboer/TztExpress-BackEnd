@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PackageService implements IPackageService {
+public class PackageService {
 
     private PackageRepository packageRepository;
 
@@ -18,25 +18,21 @@ public class PackageService implements IPackageService {
         this.packageRepository = packageRepository;
     }
 
-    @Override
     public List<Package> listAll() {
         List<Package> packages = new ArrayList<>();
         packageRepository.findAll().forEach(packages::add);
         return packages;
     }
 
-    @Override
     public Package getById(Long id) {
 
         return packageRepository.findOne(id);
     }
 
-    @Override
     public Package saveOrUpdate(Package _package) {
         return packageRepository.save(_package);
     }
 
-    @Override
     public void delete(Long id) {
         packageRepository.delete(id);
     }

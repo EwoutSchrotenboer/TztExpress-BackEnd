@@ -1,24 +1,23 @@
 package tztexpress.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import tztexpress.models.User;
-import tztexpress.services.IUserService;
+import org.springframework.web.bind.annotation.*;
+import tztexpress.core.GenericResultHandler;
+import tztexpress.models.*;
+import tztexpress.services.AuthenticationService;
+import tztexpress.services.UserService;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/api/user")
 public class UserController {
-    private IUserService userService;
+    private UserService userService;
 
     @Autowired
-    public void setUserService(IUserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -32,15 +31,51 @@ public class UserController {
         return userService.getById(Long.valueOf(id));
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public @ResponseBody User saveOrUpdateUser(@RequestBody User user){
-        user.setEmployee(false);
-        return userService.saveOrUpdate(user);
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public @ResponseBody
+    GenericResult<User> createUser(@RequestBody UserModelRequest userModelRequest){
+
+        try {
+            User user = userService.create(userModelRequest);
+            return GenericResultHandler.GenericResult(user);
+        } catch (Exception ex) {
+            return GenericResultHandler.GenericExceptionResult(ex);
+        }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public String delete(@PathVariable String id){
-        userService.delete(Long.valueOf(id));
-        return "Ok";
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public @ResponseBody
+    GenericResult<UserModel> updateUser(@RequestHeader HttpHeaders headers, @RequestBody UserModelRequest userModelRequest) {
+        // should be authenticated before this is possible
+        if (AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {
+            try {
+                User user = userService.update(userModelRequest);
+                UserModel userModel = this.userService.UserToModel(user);
+                return GenericResultHandler.GenericResult(userModel);
+            } catch (Exception ex) {
+                return GenericResultHandler.GenericExceptionResult(ex);
+            }
+        } else {
+            return GenericResultHandler.GenericExceptionResult("Invalid authentication token");
+        }
+
+    }
+
+    @RequestMapping(value = "/updatepassword", method = RequestMethod.POST)
+    public @ResponseBody
+    GenericResult<UserModel> updatePassword (@RequestHeader HttpHeaders headers, @RequestBody ChangePasswordRequest changePasswordRequest) {
+        // should be authenticated before this is possible
+        if (AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {
+
+            try {
+                User updatedUser = userService.updatePassword(changePasswordRequest);
+                UserModel userModel = this.userService.UserToModel(updatedUser);
+                return GenericResultHandler.GenericResult(userModel);
+            } catch (Exception ex) {
+                return GenericResultHandler.GenericExceptionResult(ex);
+            }
+        } else {
+            return GenericResultHandler.GenericExceptionResult("Invalid authentication token");
+        }
     }
 }
