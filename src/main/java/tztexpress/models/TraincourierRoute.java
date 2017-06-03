@@ -14,7 +14,7 @@ public class TraincourierRoute {
     private Long routeId;
 
     @Id
-    @Column(name = "i", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator="TraincourierRoute_Id_seq")
     @SequenceGenerator(name="TraincourierRoute_Id_seq", sequenceName = "TraincourierRoute_Id_seq")
     public Long getId() {
