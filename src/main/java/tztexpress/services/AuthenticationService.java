@@ -61,8 +61,8 @@ public class AuthenticationService {
 
         DateTime timestamp = DateTime.parse(timestampString);
 
-        // if token is less than 30 minutes old, continue
-        if (((DateTime.now().getMillis() - timestamp.getMillis()) / (60 * 1000) % 60) > 30 ) {
+        // if token is less than 60 minutes old, continue
+        if (((DateTime.now().getMillis() - timestamp.getMillis()) / (60 * 1000) % 60) > 60 ) {
             return false;
         }
 
