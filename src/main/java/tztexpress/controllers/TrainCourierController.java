@@ -12,9 +12,6 @@ import tztexpress.services.TrainCourierService;
 
 import java.util.List;
 
-/**
- * Created by Ewout on 4-6-2017.
- */
 @Controller
 @RequestMapping("/api/courier")
 public class TrainCourierController

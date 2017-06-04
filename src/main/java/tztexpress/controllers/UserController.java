@@ -9,8 +9,6 @@ import tztexpress.models.*;
 import tztexpress.services.AuthenticationService;
 import tztexpress.services.UserService;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/api/user")
 public class UserController {

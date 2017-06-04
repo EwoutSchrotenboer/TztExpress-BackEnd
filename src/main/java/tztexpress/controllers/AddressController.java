@@ -8,7 +8,6 @@ import tztexpress.core.GenericResultHandler;
 import tztexpress.models.*;
 import tztexpress.services.AddressService;
 import tztexpress.services.AuthenticationService;
-import tztexpress.services.UserService;
 
 import java.util.List;
 
