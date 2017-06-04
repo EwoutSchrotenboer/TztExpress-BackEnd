@@ -4,11 +4,13 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import tztexpress.enumerators.BiggestCities;
 import tztexpress.enumerators.CourierTypes;
 import tztexpress.enumerators.Status;
 import tztexpress.models.*;
+import tztexpress.services.TrainCourierService;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -24,17 +26,25 @@ public class RouteRepository {
     private GeoApiContext context = new GeoApiContext();
     private static final Double TRAINCOURIERPRICE = 5.0;
     private static final int MAXIMUMBICYCLEDISTANCECHEAPEST = 4000;
+    private TrainCourierService trainCourierService;
+
+    // Make these available throughout the repository
+    private String firstTrainStation;
+    private String lastTrainStation;
 
     /**
      * Initialize the repositories.RouteRepository
      */
-    public RouteRepository() {
+    @Autowired
+    public RouteRepository(TrainCourierService trainCourierService) {
         this.context = context
                 .setQueryRateLimit(3)
                 .setConnectTimeout(1, TimeUnit.SECONDS)
                 .setReadTimeout(1, TimeUnit.SECONDS)
                 .setWriteTimeout(1, TimeUnit.SECONDS)
                 .setApiKey("AIzaSyBdz5GYyufanHNIWY8QKnRqLKZuVlnxRYc");
+
+        this.trainCourierService = trainCourierService;
     }
 
     /**
@@ -109,13 +119,17 @@ public class RouteRepository {
                 return null;
             }
 
+            CourierModel trainCourier = this.TrainCourierRoute(distanceTransit);
+
             // Check database if a courier is available for this route.
             String weekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
 
-
-
-            CourierModel trainCourier = this.TrainCourierRoute(distanceTransit);
-            courierModelArrayList.add(trainCourier);
+            // Check if trainCourier is available for route
+            if (this.firstTrainStation != null && this.lastTrainStation != null) {
+                if (this.trainCourierService.isTrainCourierAvailable(weekDay, this.firstTrainStation, this.lastTrainStation)) {
+                    courierModelArrayList.add(trainCourier);
+                }
+            }
         }
 
         return this.CalculateCheapestCourier(courierModelArrayList);

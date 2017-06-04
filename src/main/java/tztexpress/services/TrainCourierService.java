@@ -3,6 +3,7 @@ package tztexpress.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tztexpress.models.Traincourier;
+import tztexpress.models.TraincourierRoute;
 import tztexpress.repositories.TrainCourierRepository;
 
 import java.util.ArrayList;
@@ -25,5 +26,11 @@ public class TrainCourierService {
 
     public Traincourier getById(long id) {
         return this.trainCourierRepository.findOne(id);
+    }
+
+    public boolean isTrainCourierAvailable(String weekday, String originTrainStation, String destinationTrainStation) {
+        List<TraincourierRoute> availableCourierRoutes = trainCourierRepository.availableCourierRoutes(weekday, originTrainStation, destinationTrainStation);
+
+        return !(availableCourierRoutes.size() < 1);
     }
 }

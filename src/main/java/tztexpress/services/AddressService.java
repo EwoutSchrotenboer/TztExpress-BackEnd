@@ -27,7 +27,7 @@ public class AddressService {
     public Address getAddress(AddressModel addressModel) throws InvalidDataException {
         // check if address is complete:
         if (validAddress(addressModel)) {
-                return addressRepository.findAddress(addressModel.address1, addressModel.address2, addressModel.zipcode, addressModel.city);
+            return addressRepository.findAddress(addressModel.address1, addressModel.address2, addressModel.zipcode, addressModel.city);
         }
 
         return null;
