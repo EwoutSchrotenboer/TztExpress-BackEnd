@@ -23,11 +23,12 @@ public class UserController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public @ResponseBody
-    GenericResult<User> createUser(@RequestBody UserModelRequest userModelRequest){
+    GenericResult<UserModel> createUser(@RequestBody UserModelRequest userModelRequest){
 
         try {
             User user = userService.create(userModelRequest);
-            return GenericResultHandler.GenericResult(user);
+            UserModel userModel = userService.UserToModel(user);
+            return GenericResultHandler.GenericResult(userModel);
         } catch (Exception ex) {
             return GenericResultHandler.GenericExceptionResult(ex);
         }
