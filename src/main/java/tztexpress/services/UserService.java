@@ -24,16 +24,6 @@ public class UserService {
         this.addressService = addressService;
     }
 
-    public List<User> listAll() {
-        List<User> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
-        return users;
-    }
-
-    public User getById(long id) {
-        return null;
-    }
-
     public User create(UserModelRequest userModel) throws InvalidDataException {
 
         // check if user exists in database

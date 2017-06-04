@@ -21,16 +21,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public @ResponseBody List<User> listUsers(){
-        return userService.listAll();
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public @ResponseBody User getUser(@PathVariable String id){
-        return userService.getById(Long.valueOf(id));
-    }
-
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public @ResponseBody
     GenericResult<User> createUser(@RequestBody UserModelRequest userModelRequest){
@@ -58,7 +48,6 @@ public class UserController {
         } else {
             return GenericResultHandler.GenericExceptionResult("Invalid authentication token");
         }
-
     }
 
     @RequestMapping(value = "/updatepassword", method = RequestMethod.POST)
