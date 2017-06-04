@@ -2,15 +2,10 @@ package tztexpress.services;
 
 import com.sun.media.sound.InvalidDataException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import tztexpress.core.Password;
 import tztexpress.models.*;
 import tztexpress.repositories.UserRepository;
-
-import javax.naming.ConfigurationException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class UserService {

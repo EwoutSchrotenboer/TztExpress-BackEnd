@@ -1,16 +1,11 @@
 package tztexpress.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import tztexpress.core.GenericResultHandler;
-import tztexpress.models.ExceptionModel;
 import tztexpress.models.GenericResult;
-import tztexpress.models.RouteRequest;
 import tztexpress.models.TokenRequest;
 import tztexpress.services.AuthenticationService;
-
-import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/api/auth")
