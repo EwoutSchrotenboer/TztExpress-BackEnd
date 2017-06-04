@@ -86,7 +86,7 @@ public class AddressService {
         return null;
     }
 
-    private static boolean validAddress(AddressModel addressModel) throws InvalidDataException {
+    public static boolean validAddress(AddressModel addressModel) throws InvalidDataException {
         if (addressModel.address1 == null || addressModel.zipcode == null || addressModel.city == null) {
             String exceptionMessage = new String();
 
@@ -108,5 +108,15 @@ public class AddressService {
         }
     }
 
+    public Address findOrCreateAddress(AddressModel addressModel) throws InvalidDataException {
+        Address returnValue;
 
+        returnValue = this.getAddress(addressModel);
+
+        if (returnValue == null) {
+            returnValue = this.createAddress(addressModel);
+        }
+
+        return returnValue;
+    }
 }
