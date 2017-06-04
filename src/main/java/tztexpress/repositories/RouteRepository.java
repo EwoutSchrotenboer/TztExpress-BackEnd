@@ -11,7 +11,9 @@ import tztexpress.enumerators.Status;
 import tztexpress.models.*;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Repository
 public class RouteRepository {
     private GeoApiContext context = new GeoApiContext();
-    private static final Double TRAINCOURIERPRICE = 6.0;
+    private static final Double TRAINCOURIERPRICE = 5.0;
     private static final int MAXIMUMBICYCLEDISTANCECHEAPEST = 4000;
 
     /**
@@ -51,6 +53,8 @@ public class RouteRepository {
             returnValue.Courier = cheapestCourier;
             returnValue.Type = cheapestCourier.Type.toString();
             returnValue.Status = Status.OK.toString();
+
+            // 20% markup voor Bernard Tromp
             returnValue.Courier.Cost *= 1.2;
             returnValue.Cost = cheapestCourier.Cost.toString();
 
@@ -104,6 +108,11 @@ public class RouteRepository {
             if (distanceTransit == null) {
                 return null;
             }
+
+            // Check database if a courier is available for this route.
+            String weekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
+
+
 
             CourierModel trainCourier = this.TrainCourierRoute(distanceTransit);
             courierModelArrayList.add(trainCourier);
@@ -271,6 +280,9 @@ public class RouteRepository {
             returnValue += extraDistanceInKm * 0.40;
         }
 
+        // 10% discount on all external transport
+        returnValue = returnValue * 0.9;
+
         return returnValue;
 
     }
@@ -293,6 +305,9 @@ public class RouteRepository {
 
             returnValue += extraDistanceInKm * 0.39;
         }
+
+        // 10% discount on all external transport
+        returnValue = returnValue * 0.9;
 
         return returnValue;
     }
