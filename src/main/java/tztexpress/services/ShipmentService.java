@@ -6,6 +6,9 @@ import tztexpress.repositories.ShipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * This service creates a shipment, for a package.
+ */
 @Service
 public class ShipmentService {
 
@@ -16,6 +19,17 @@ public class ShipmentService {
         this.shipmentRepository = shipmentRepository;
     }
 
+    /**
+     * A shipment is created with the provided information. This way, all couriers get registered as having handled
+     * a specific package
+     * @param originId the origin address id
+     * @param destinationId the destination addrss id
+     * @param packageId the id of the package
+     * @param cost the full cost of the shipping route
+     * @param courierType the type of the courier (Defined in CourierTypes)
+     * @param courierId the Id of the courier
+     * @return the new shipment.
+     */
     public Shipment createShipment(long originId, long destinationId, long packageId, String cost, String courierType, long courierId) {
         Shipment shipment = new Shipment();
 

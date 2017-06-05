@@ -24,9 +24,23 @@ import java.util.concurrent.TimeUnit;
  */
 @Repository
 public class RouteRepository {
+    /**
+     * The geoapicontext is the context for Google's directions api.
+     */
     private GeoApiContext context = new GeoApiContext();
+
+    /**
+     * The traincourierprice is in €
+     * TODO: Refactor all constants to a new file
+     */
     private static final Double TRAINCOURIERPRICE = 5.0;
+
+    /**
+     * The maximum distance the bicycle will win out over all other options if the package is within one of the 25
+     * biggest cities. Distance is in meters.
+     */
     private static final int MAXIMUMBICYCLEDISTANCECHEAPEST = 4000;
+
     private TrainCourierService trainCourierService;
 
     /**

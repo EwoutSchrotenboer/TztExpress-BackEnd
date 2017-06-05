@@ -1,7 +1,7 @@
 package tztexpress.models;
 
 /**
- * Created by Ewout on 14-5-2017.
+ * The exceptionmodel to return in the generic responses
  */
 public class ExceptionModel extends BaseModel {
     public String Message;

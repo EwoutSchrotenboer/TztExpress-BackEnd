@@ -1,7 +1,7 @@
 package tztexpress.models;
 
 /**
- * Created by Ewout on 31-5-2017.
+ * Usermodel , to adjust or create users.
  */
 public class UserModelRequest {
     public String firstName;

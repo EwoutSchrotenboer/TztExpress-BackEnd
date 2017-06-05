@@ -11,6 +11,10 @@ import tztexpress.services.AuthenticationService;
 
 import java.util.List;
 
+/**
+ * The address controller contains the methods for creating and adjusting addresses.
+ * Authenticationtokens are required for all described methods.
+ */
 @Controller
 @RequestMapping("/api/address")
 public class AddressController {
@@ -21,6 +25,12 @@ public class AddressController {
         this.addressService = addressService;
     }
 
+    /**
+     * The create method creates a new address
+     * @param headers the json and authentication-header
+     * @param addressModel the model with the address information
+     * @return a generic result with the new address
+     */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public @ResponseBody
     GenericResult<Address> createAddress(@RequestHeader HttpHeaders headers, @RequestBody AddressModel addressModel){
@@ -36,6 +46,12 @@ public class AddressController {
         }
     }
 
+    /**
+     * Update the address with new information.
+     * @param headers the json and authentication-header
+     * @param addressModel The address model, it contains an Id value for the current address in the database.
+     * @return
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public @ResponseBody
     GenericResult<Address> updateAddress(@RequestHeader HttpHeaders headers, @RequestBody ChangeAddressModel addressModel) {

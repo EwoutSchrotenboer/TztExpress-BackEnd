@@ -1,9 +1,7 @@
 package tztexpress.models;
 
-import tztexpress.models.Traincourier;
-
 /**
- * Created by Ewout on 5-6-2017.
+ * Is used to check whether a traincourier is available for a specific route.
  */
 public class AvailableTrainCourierModel {
     public long traincourierId;

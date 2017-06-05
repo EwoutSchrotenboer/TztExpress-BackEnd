@@ -3,7 +3,7 @@ package tztexpress.models;
 import javax.persistence.*;
 
 /**
- * Created by Ewout on 1-6-2017.
+ * Generated Externalcourier model from the Database
  */
 @Entity
 @Table(name="`externalcourier`")
