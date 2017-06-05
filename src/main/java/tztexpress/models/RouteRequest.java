@@ -1,7 +1,7 @@
 package tztexpress.models;
 
 /**
- * Created by Ewout on 11-5-2017.
+ * A routerequest for the routecalculation
  */
 public class RouteRequest {
     public String origin;

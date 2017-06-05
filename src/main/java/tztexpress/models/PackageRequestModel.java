@@ -1,7 +1,8 @@
 package tztexpress.models;
 
-import tztexpress.models.CourierChoiceModel;
-
+/**
+ * The packagerequest model, with the generated courierchoicemodel and the package information.
+ */
 public class PackageRequestModel {
     public CourierChoiceModel CourierChoiceModel;
     public Long weight;

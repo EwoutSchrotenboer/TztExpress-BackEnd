@@ -13,6 +13,11 @@ import tztexpress.services.PackageService;
 
 import java.util.List;
 
+/**
+ * The packagecontroller contains code for both the frontend and the backoffice application. the request for packages
+ * and the single package query are for the backoffice. Creation of packages is done on the website/frontend.
+ * Authentication is required for all methods.
+ */
 @Controller
 @RequestMapping("/api/package")
 public class PackageController {
@@ -24,6 +29,11 @@ public class PackageController {
     }
 
 
+    /**
+     * Request a list of all packages, authentication is required.
+     * @param headers the authentication header
+     * @return the list of packages
+     */
     @RequestMapping(value = "/packages", method = RequestMethod.GET)
     public @ResponseBody GenericResult<List<Package>> listPackages(@RequestHeader HttpHeaders headers)
     {
@@ -35,6 +45,12 @@ public class PackageController {
         }
     }
 
+    /**
+     * Returns a package with a specific Id
+     * @param headers the authentication header
+     * @param id the databaseId of the package
+     * @return the requested package
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public @ResponseBody GenericResult<Package> getPackage(@RequestHeader HttpHeaders headers, @PathVariable String id) {
         if(AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {
@@ -44,7 +60,12 @@ public class PackageController {
         }
     }
 
-//    // TODO
+    /**
+     * Creates the package, with the CourierChoiceModel and package information. It returns the package model
+     * @param headers the authentication and json headers
+     * @param packageRequestModel this contains package information and the earlier created route informatin
+     * @return the created package.
+     */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public @ResponseBody GenericResult<Package> createPackage(@RequestHeader HttpHeaders headers, @RequestBody PackageRequestModel packageRequestModel) {
         if(AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {

@@ -3,7 +3,7 @@ package tztexpress.models;
 import javax.persistence.*;
 
 /**
- * Created by Ewout on 1-6-2017.
+ * Generated Shipment model from the database
  */
 @Entity
 @Table(name="`shipment`")

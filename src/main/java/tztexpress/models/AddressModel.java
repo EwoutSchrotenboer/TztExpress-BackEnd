@@ -1,7 +1,7 @@
 package tztexpress.models;
 
 /**
- * Created by Ewout on 3-6-2017.
+ * The address model contains the information that is needed to retrieve and create addresses in the database.
  */
 public class AddressModel {
     public String address1;

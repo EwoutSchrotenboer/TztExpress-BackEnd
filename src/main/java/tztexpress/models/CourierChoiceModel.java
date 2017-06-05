@@ -7,15 +7,29 @@ import java.util.ArrayList;
  * courier.
  */
 public class CourierChoiceModel extends BaseModel {
+    /**
+     * The main courier
+     */
     public CourierModel Courier;
+
+    /**
+     * The type of the courier
+     */
     public String Type;
+
+    /**
+     * Additional information, currently not in use.
+     */
     public String AdditionalInformation;
+
+    /**
+     * Status of the route calculation
+     */
     public String Status;
 
     public String OriginAddress;
     public String DestinationAddress;
 
     // Note: Cost is set to String here, because the JSON somehow truncates the values.
-    // TODO: find out how to fix this decently.
     public String Cost;
 }
