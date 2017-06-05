@@ -53,11 +53,11 @@ public class PackageService {
     }
 
     public Package createPackage(PackageRequestModel packageRequestModel) throws IllegalArgumentException {
-        if (packageRequestModel.CourierChoiceModel == null) {
+        if (packageRequestModel.courierchoicemodel == null) {
             throw new IllegalArgumentException("Route information is not provided.");
         }
-        CourierChoiceModel courierChoiceModel = packageRequestModel.CourierChoiceModel;
-        CourierModel courier = courierChoiceModel.Courier;
+        CourierChoiceModel courierChoiceModel = packageRequestModel.courierchoicemodel;
+        CourierModel courier = courierChoiceModel.courier;
 
         // Create package
         Package pack = new Package();
@@ -66,8 +66,8 @@ public class PackageService {
         pack.setDetails(packageRequestModel.details);
 
         // handle 1 courier + 2 addresses
-        AddressModel originAddress = this.convertStringToAddress(courierChoiceModel.OriginAddress);
-        AddressModel destinationAddress = this.convertStringToAddress(courierChoiceModel.DestinationAddress);
+        AddressModel originAddress = this.convertStringToAddress(courierChoiceModel.originaddress);
+        AddressModel destinationAddress = this.convertStringToAddress(courierChoiceModel.destinationaddress);
 
         // Check if database contains addresses, if not, add them.
         Address originDbAddress = this.addressService.findOrCreateAddress(originAddress);
@@ -79,7 +79,7 @@ public class PackageService {
         // save package to get the Id
         Package dbPackage = this.packageRepository.save(pack);
 
-        String courierType = courierChoiceModel.Type;
+        String courierType = courierChoiceModel.type;
 
 
         // Create shipments
@@ -87,23 +87,23 @@ public class PackageService {
 
         if (courierType.equals(CourierTypes.TRAINCOURIER.toString())) {
             // handle logic for traincouriers
-            AddressModel firstTrainStationAddress = this.convertStringToAddress(courierChoiceModel.Courier.OriginCourier.DestinationAddress);
-            AddressModel lastTrainStationAddress = this.convertStringToAddress(courierChoiceModel.Courier.DestinationCourier.OriginAddress);
+            AddressModel firstTrainStationAddress = this.convertStringToAddress(courierChoiceModel.courier.origincourier.destinationaddress);
+            AddressModel lastTrainStationAddress = this.convertStringToAddress(courierChoiceModel.courier.destinationcourier.originaddress);
 
             Address firstTrainStationDbAddress = this.addressService.findOrCreateAddress(firstTrainStationAddress);
             Address lastTrainStationDbAddress = this.addressService.findOrCreateAddress(lastTrainStationAddress);
 
-            String originCourierType = courierChoiceModel.Courier.OriginCourier.Type.toString();
-            String destinationCourierType = courierChoiceModel.Courier.DestinationCourier.Type.toString();
+            String originCourierType = courierChoiceModel.courier.origincourier.type.toString();
+            String destinationCourierType = courierChoiceModel.courier.destinationcourier.type.toString();
             // Get the three couriers
             long originCourierId = this.externalCourierRepository.findExternalCourierByType(originCourierType).get(0).getId();
             long destinationCourierId = this.externalCourierRepository.findExternalCourierByType(destinationCourierType).get(0).getId();
-            long trainCourierId = packageRequestModel.CourierChoiceModel.Courier.TrainCourier.TrainCourierDbId;
+            long trainCourierId = packageRequestModel.courierchoicemodel.courier.traincourier.traincourierdbid;
 
             // create three shipments
-            Shipment originShipment = this.shipmentService.createShipment(originDbAddress.getId(), firstTrainStationDbAddress.getId(), dbPackage.getId(), courier.OriginCourier.Cost.toString(), originCourierType, originCourierId);
-            Shipment trainShipment = this.shipmentService.createShipment(firstTrainStationDbAddress.getId(), lastTrainStationDbAddress.getId(), dbPackage.getId(), courier.TrainCourier.Cost.toString(), courierType, trainCourierId);
-            Shipment destinationShipment = this.shipmentService.createShipment(lastTrainStationDbAddress.getId(), destinationDbAddress.getId(), dbPackage.getId(), courier.DestinationCourier.Cost.toString(), destinationCourierType, destinationCourierId);
+            Shipment originShipment = this.shipmentService.createShipment(originDbAddress.getId(), firstTrainStationDbAddress.getId(), dbPackage.getId(), courier.origincourier.cost.toString(), originCourierType, originCourierId);
+            Shipment trainShipment = this.shipmentService.createShipment(firstTrainStationDbAddress.getId(), lastTrainStationDbAddress.getId(), dbPackage.getId(), courier.traincourier.cost.toString(), courierType, trainCourierId);
+            Shipment destinationShipment = this.shipmentService.createShipment(lastTrainStationDbAddress.getId(), destinationDbAddress.getId(), dbPackage.getId(), courier.destinationcourier.cost.toString(), destinationCourierType, destinationCourierId);
 
             shipmentList.add(originShipment);
             shipmentList.add(destinationShipment);
@@ -111,7 +111,7 @@ public class PackageService {
 
         } else {
             // Get the courier
-            String cost = courierChoiceModel.Cost.toString();
+            String cost = courierChoiceModel.cost.toString();
             long courierId = this.externalCourierRepository.findExternalCourierByType(courierType).get(0).getId();
             // Create the shipment
             Shipment shipment = this.shipmentService.createShipment(originDbAddress.getId(), destinationDbAddress.getId(), dbPackage.getId(), cost, courierType, courierId);

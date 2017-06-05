@@ -38,10 +38,10 @@ public class UserService {
 
         // otherwise, create new user
         User newUser = new User();
-        newUser.setFirstName(userModel.firstName);
-        newUser.setLastName(userModel.lastName);
+        newUser.setFirstName(userModel.firstname);
+        newUser.setLastName(userModel.lastname);
         newUser.setPrefix(userModel.prefix);
-        newUser.setEmployee(userModel.isEmployee);
+        newUser.setEmployee(userModel.isemployee);
         newUser.setEmail(userModel.email.toLowerCase());
 
         Address address = this.addressService.getAddress(userModel.address);
@@ -75,12 +75,12 @@ public class UserService {
         }
 
         // update databaseuser
-        if(userModel.firstName != null) {
-            user.setFirstName(userModel.firstName);
+        if(userModel.firstname != null) {
+            user.setFirstName(userModel.firstname);
         }
 
-        if(userModel.lastName != null) {
-            user.setLastName(userModel.lastName);
+        if(userModel.lastname != null) {
+            user.setLastName(userModel.lastname);
         }
 
         if(userModel.prefix != null) {
@@ -99,13 +99,13 @@ public class UserService {
     public User updatePassword(ChangePasswordRequest changePasswordRequest) throws IllegalArgumentException {
         boolean returnValue = false;
 
-        User user = userRepository.findByEmailAddress(changePasswordRequest.Email.toLowerCase());
+        User user = userRepository.findByEmailAddress(changePasswordRequest.email.toLowerCase());
 
         if (user == null) {
             throw new IllegalArgumentException("Email-address does not exist in database.");
         }
 
-        user.setPassword(Password.hashPassword(changePasswordRequest.Password));
+        user.setPassword(Password.hashPassword(changePasswordRequest.password));
 
         return userRepository.save(user);
 
@@ -114,12 +114,12 @@ public class UserService {
     public UserModel UserToModel(User user) {
         UserModel returnValue = new UserModel();
 
-        returnValue.Email = user.getEmail();
-        returnValue.FirstName = user.getFirstName();
-        returnValue.LastName = user.getLastName();
-        returnValue.Prefix = user.getPrefix();
-        returnValue.Email = user.getEmail().toLowerCase();
-        returnValue.AddressId = user.getAddressId();
+        returnValue.email = user.getEmail();
+        returnValue.firstname = user.getFirstName();
+        returnValue.lastname = user.getLastName();
+        returnValue.prefix = user.getPrefix();
+        returnValue.email = user.getEmail().toLowerCase();
+        returnValue.addressid = user.getAddressId();
 
         return returnValue;
     }

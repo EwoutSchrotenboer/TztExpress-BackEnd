@@ -93,13 +93,13 @@ public class AuthenticationService {
     public static String CreateToken(TokenRequest tokenRequest) throws UnsupportedEncodingException, IllegalArgumentException {
         // validate request before providing a token
         // validate password with database
-        User user = userRepository.findByEmailAddress(tokenRequest.Email);
+        User user = userRepository.findByEmailAddress(tokenRequest.email);
 
-        if (user == null || !Password.checkPassword(tokenRequest.Password, user.getPassword())) {
+        if (user == null || !Password.checkPassword(tokenRequest.password, user.getPassword())) {
             throw new IllegalArgumentException("Invalid email or password");
         }
 
-        String authString = tokenRequest.Email + ":" + tokenRequest.Password + ":" + DateTime.now();
+        String authString = tokenRequest.email + ":" + tokenRequest.password + ":" + DateTime.now();
 
         byte[] encodedString = Base64.encodeBase64(authString.getBytes());
 

@@ -35,12 +35,12 @@ public class TrainCourierService {
         List<TraincourierRoute> availableCourierRoutes = trainCourierRepository.availableCourierRoutes(weekday, originTrainStation, destinationTrainStation);
 
         if(availableCourierRoutes.size() < 1) {
-            returnValue.isAvailable = false;
+            returnValue.isavailable = false;
             return returnValue;
         } else {
             // Initially, just get the first courierId, might want to refactor this to a round robin
-            returnValue.isAvailable = true;
-            returnValue.traincourierId = availableCourierRoutes.get(0).getTraincourierId();
+            returnValue.isavailable = true;
+            returnValue.traincourierid = availableCourierRoutes.get(0).getTraincourierId();
             return returnValue;
         }
     }
