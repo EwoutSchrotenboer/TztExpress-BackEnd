@@ -29,10 +29,6 @@ public class RouteRepository {
     private static final int MAXIMUMBICYCLEDISTANCECHEAPEST = 4000;
     private TrainCourierService trainCourierService;
 
-    // Make these available throughout the repository
-    private String firstTrainStation;
-    private String lastTrainStation;
-
     /**
      * Initialize the repositories.RouteRepository
      */
@@ -126,10 +122,10 @@ public class RouteRepository {
             String weekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
 
             // Check if trainCourier is available for route
-            if (this.firstTrainStation != null && this.lastTrainStation != null) {
-                AvailableTrainCourierModel availableCourier = this.trainCourierService.getTrainCourierForRoute(weekDay, this.firstTrainStation, this.lastTrainStation);
+            if (trainCourier.TrainCourier.OriginAddress != null && trainCourier.TrainCourier.DestinationAddress != null) {
+                AvailableTrainCourierModel availableCourier = this.trainCourierService.getTrainCourierForRoute(weekDay, trainCourier.TrainCourier.OriginAddress, trainCourier.TrainCourier.DestinationAddress);
                 if (availableCourier.isAvailable) {
-                    trainCourier.TrainCourierDbId = availableCourier.traincourierId;
+                    trainCourier.TrainCourier.TrainCourierDbId = availableCourier.traincourierId;
                     courierModelArrayList.add(trainCourier);
                 }
             }

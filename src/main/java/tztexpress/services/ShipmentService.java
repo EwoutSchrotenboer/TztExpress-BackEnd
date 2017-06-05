@@ -25,7 +25,7 @@ public class ShipmentService {
         shipment.setCost(cost);
         shipment.setCouriertype(courierType);
 
-        if (courierType == CourierTypes.TRAINCOURIER.toString()) {
+        if (courierType.equals(CourierTypes.TRAINCOURIER.toString())) {
             shipment.setTraincourierId(courierId);
         } else {
             shipment.setExternalcourierId(courierId);
