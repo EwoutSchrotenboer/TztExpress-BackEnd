@@ -234,4 +234,11 @@ public class PackageService {
         }
         return true;
     }
+
+    public PackageModel getPackageModel(Long aLong) {
+        PackageModel returnValue = new PackageModel();
+
+        return returnValue; 
+
+    }
 }

@@ -7,6 +7,7 @@ import tztexpress.models.GenericResult;
 import tztexpress.models.Package;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import tztexpress.models.PackageModel;
 import tztexpress.models.PackageRequestModel;
 import tztexpress.services.AuthenticationService;
 import tztexpress.services.PackageService;
@@ -52,9 +53,11 @@ public class PackageController {
      * @return the requested package
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public @ResponseBody GenericResult<Package> getPackage(@RequestHeader HttpHeaders headers, @PathVariable String id) {
+    public @ResponseBody GenericResult<PackageModel> getPackage(@RequestHeader HttpHeaders headers, @PathVariable String id) {
         if(AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {
-            return GenericResultHandler.GenericResult(packageService.getById(Long.valueOf(id)));
+            PackageModel returnValue = this.packageService.getPackageModel(Long.valueOf(id));
+
+            return GenericResultHandler.GenericResult(returnValue);
         } else {
             return GenericResultHandler.GenericExceptionResult("Invalid authentication token");
         }
