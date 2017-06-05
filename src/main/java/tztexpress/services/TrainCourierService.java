@@ -2,6 +2,7 @@ package tztexpress.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tztexpress.models.AvailableTrainCourierModel;
 import tztexpress.models.Traincourier;
 import tztexpress.models.TraincourierRoute;
 import tztexpress.repositories.TrainCourierRepository;
@@ -28,9 +29,19 @@ public class TrainCourierService {
         return this.trainCourierRepository.findOne(id);
     }
 
-    public boolean isTrainCourierAvailable(String weekday, String originTrainStation, String destinationTrainStation) {
+    public AvailableTrainCourierModel getTrainCourierForRoute(String weekday, String originTrainStation, String destinationTrainStation) {
+        AvailableTrainCourierModel returnValue = new AvailableTrainCourierModel();
+
         List<TraincourierRoute> availableCourierRoutes = trainCourierRepository.availableCourierRoutes(weekday, originTrainStation, destinationTrainStation);
 
-        return !(availableCourierRoutes.size() < 1);
+        if(availableCourierRoutes.size() < 1) {
+            returnValue.isAvailable = false;
+            return returnValue;
+        } else {
+            // Initially, just get the first courierId, might want to refactor this to a round robin
+            returnValue.isAvailable = true;
+            returnValue.traincourierId = availableCourierRoutes.get(0).getTraincourierId();
+            return returnValue;
+        }
     }
 }

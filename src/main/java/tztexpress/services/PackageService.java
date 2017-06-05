@@ -2,13 +2,13 @@ package tztexpress.services;
 
 import com.sun.media.sound.InvalidDataException;
 import tztexpress.enumerators.CourierTypes;
-import tztexpress.models.Address;
-import tztexpress.models.AddressModel;
+import tztexpress.models.*;
 import tztexpress.models.Package;
-import tztexpress.models.PackageRequestModel;
+import tztexpress.repositories.ExternalCourierRepository;
 import tztexpress.repositories.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tztexpress.repositories.ShipmentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +17,22 @@ import java.util.List;
 public class PackageService {
 
     private PackageRepository packageRepository;
+    private ShipmentService shipmentService;
     private AddressService addressService;
+    private TrainCourierService trainCourierService;
+    private ExternalCourierRepository externalCourierRepository;
 
     @Autowired
-    public PackageService(PackageRepository packageRepository, AddressService addressService) {
+    public PackageService(PackageRepository packageRepository,
+                          AddressService addressService,
+                          ShipmentService shipmentService,
+                          TrainCourierService trainCourierService,
+                          ExternalCourierRepository externalCourierRepository) {
         this.packageRepository = packageRepository;
         this.addressService = addressService;
+        this.shipmentService = shipmentService;
+        this.trainCourierService = trainCourierService;
+        this.externalCourierRepository = externalCourierRepository;
     }
 
     public List<Package> listAll() {
@@ -45,11 +55,11 @@ public class PackageService {
     }
 
     public Package createPackage(PackageRequestModel packageRequestModel) throws InvalidDataException {
-        // todo:
-        // check databases if addresses are available for origin and destination. (one courier, two addresses, three couriers, six addresses)
         if (packageRequestModel.CourierChoiceModel == null) {
             throw new InvalidDataException("Route information is not provided.");
         }
+        CourierChoiceModel courierChoiceModel = packageRequestModel.CourierChoiceModel;
+        CourierModel courier = courierChoiceModel.Courier;
 
         // Create package
         Package pack = new Package();
@@ -58,8 +68,8 @@ public class PackageService {
         pack.setDetails(packageRequestModel.details);
 
         // handle 1 courier + 2 addresses
-        AddressModel originAddress = this.convertStringToAddress(packageRequestModel.CourierChoiceModel.OriginAddress);
-        AddressModel destinationAddress = this.convertStringToAddress(packageRequestModel.CourierChoiceModel.DestinationAddress);
+        AddressModel originAddress = this.convertStringToAddress(courierChoiceModel.OriginAddress);
+        AddressModel destinationAddress = this.convertStringToAddress(courierChoiceModel.DestinationAddress);
 
         // Check if database contains addresses, if not, add them.
         Address originDbAddress = this.addressService.findOrCreateAddress(originAddress);
@@ -68,27 +78,53 @@ public class PackageService {
         pack.setOriginAddressId(originDbAddress.getId());
         pack.setDestinationAddressId(destinationDbAddress.getId());
 
-        String courierType = packageRequestModel.CourierChoiceModel.Type;
+        // save package to get the Id
+        Package dbPackage = this.packageRepository.save(pack);
+
+        String courierType = courierChoiceModel.Type;
+
+
+        // Create shipments
+        List<Shipment> shipmentList = new ArrayList<>();
 
         if (courierType.equals(CourierTypes.TRAINCOURIER.toString())) {
             // handle logic for traincouriers
-            AddressModel firstTrainStationAddress = this.convertStringToAddress(packageRequestModel.CourierChoiceModel.Courier.OriginCourier.DestinationAddress);
-            AddressModel lastTrainStationAddress = this.convertStringToAddress(packageRequestModel.CourierChoiceModel.Courier.DestinationCourier.OriginAddress);
+            AddressModel firstTrainStationAddress = this.convertStringToAddress(courierChoiceModel.Courier.OriginCourier.DestinationAddress);
+            AddressModel lastTrainStationAddress = this.convertStringToAddress(courierChoiceModel.Courier.DestinationCourier.OriginAddress);
 
             Address firstTrainStationDbAddress = this.addressService.findOrCreateAddress(firstTrainStationAddress);
             Address lastTrainStationDbAddress = this.addressService.findOrCreateAddress(lastTrainStationAddress);
 
-        } else {
+            String originCourierType = courierChoiceModel.Courier.OriginCourier.Type.toString();
+            String destinationCourierType = courierChoiceModel.Courier.DestinationCourier.Type.toString();
+            // Get the three couriers
+            long originCourierId = this.externalCourierRepository.findExternalCourierByType(originCourierType).get(0).getId();
+            long destinationCourierId = this.externalCourierRepository.findExternalCourierByType(destinationCourierType).get(0).getId();
+            long trainCourierId = packageRequestModel.CourierChoiceModel.Courier.TrainCourier.TrainCourierDbId;
 
+            // create three shipments
+            Shipment originShipment = this.shipmentService.createShipment(originDbAddress.getId(), firstTrainStationDbAddress.getId(), dbPackage.getId(), courier.OriginCourier.Cost.toString(), originCourierType, originCourierId);
+            Shipment trainShipment = this.shipmentService.createShipment(firstTrainStationDbAddress.getId(), lastTrainStationDbAddress.getId(), dbPackage.getId(), courier.TrainCourier.Cost.toString(), courierType, trainCourierId);
+            Shipment destinationShipment = this.shipmentService.createShipment(lastTrainStationDbAddress.getId(), destinationDbAddress.getId(), dbPackage.getId(), courier.DestinationCourier.Cost.toString(), destinationCourierType, destinationCourierId);
+
+            shipmentList.add(originShipment);
+            shipmentList.add(destinationShipment);
+            shipmentList.add(trainShipment);
+
+        } else {
+            // Get the courier
+            String cost = courierChoiceModel.Cost.toString();
+            long courierId = this.externalCourierRepository.findExternalCourierByType(courierType).get(0).getId();
+            // Create the shipment
+            Shipment shipment = this.shipmentService.createShipment(originDbAddress.getId(), destinationDbAddress.getId(), dbPackage.getId(), cost, courierType, courierId);
+
+            shipmentList.add(shipment);
         }
-        // if not: create addresses with the available information.
-        // create package
-        // create shipments
-        // link external couriers
-        // set up list for emails to send
-        // (mock) send(ing) emails
+
+
+        // TODO: (mock) send(ing) emails
         // return package so the Id can be used for further reference
-        return null;
+        return dbPackage;
     }
 
     // HACK HACK HACK

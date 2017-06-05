@@ -14,6 +14,7 @@ public class Package {
     private Long weight;
     private String value;
     private String details;
+    private Boolean isDelivered;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -77,6 +78,16 @@ public class Package {
         this.details = details;
     }
 
+    @Basic
+    @Column(name = "isdelivered", nullable = true)
+    public Boolean getIsDelivered() {
+        return isDelivered;
+    }
+
+    public void setIsDelivered(Boolean isDelivered) {
+        this.isDelivered = isDelivered;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,7 +103,7 @@ public class Package {
         if (weight != null ? !weight.equals(aPackage.weight) : aPackage.weight != null) return false;
         if (value != null ? !value.equals(aPackage.value) : aPackage.value != null) return false;
         if (details != null ? !details.equals(aPackage.details) : aPackage.details != null) return false;
-
+        if (isDelivered != null ? !isDelivered.equals(aPackage.isDelivered) : aPackage.isDelivered != null) return false;
         return true;
     }
 
@@ -104,6 +115,7 @@ public class Package {
         result = 31 * result + (weight != null ? weight.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
+        result = 31 * result + (isDelivered != null ? isDelivered.hashCode() : 0);
         return result;
     }
 }
