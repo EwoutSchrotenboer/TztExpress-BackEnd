@@ -1,17 +1,14 @@
 package tztexpress.services;
 
-import com.sun.media.sound.InvalidDataException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import tztexpress.core.Password;
 import tztexpress.models.*;
 import tztexpress.repositories.UserRepository;
 
-import javax.naming.ConfigurationException;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * This service creates and updates users.
+ */
 @Service
 public class UserService {
 
@@ -24,23 +21,19 @@ public class UserService {
         this.addressService = addressService;
     }
 
-    public List<User> listAll() {
-        List<User> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
-        return users;
-    }
-
-    public User getById(long id) {
-        return null;
-    }
-
-    public User create(UserModelRequest userModel) throws InvalidDataException {
+    /**
+     * Creates the user with the corresponding information from the provided usermodel
+     * @param userModel the model with the userinformation
+     * @return the created user
+     * @throws IllegalArgumentException if information is missing or fields are empty, this exception is thrown.
+     */
+    public User create(UserModelRequest userModel) throws IllegalArgumentException {
 
         // check if user exists in database
         User user = userRepository.findByEmailAddress(userModel.email.toLowerCase());
 
         if (user != null) {
-            throw new InvalidDataException("Email-address already exists in database.");
+            throw new IllegalArgumentException("Email-address already exists in database.");
         }
 
         // otherwise, create new user
@@ -66,12 +59,19 @@ public class UserService {
             return userRepository.save(newUser);
     }
 
-    public User update(UserModelRequest userModel) throws InvalidDataException {
+    /**
+     * Updates a user with the corresponding data, user is checked through email address
+     * @param userModel the model with the data to adjust
+     * @return the updated usermodel
+     * @throws IllegalArgumentException if any of the provided information is incorrect, the exception is thrown
+     * For example, when the email address isn't found in the database.
+     */
+    public User update(UserModelRequest userModel) throws IllegalArgumentException {
         // Get user from database:
         User user = userRepository.findByEmailAddress(userModel.email);
 
         if (user == null) {
-            throw new InvalidDataException("Email-address does not exist in database.");
+            throw new IllegalArgumentException("Email-address does not exist in database.");
         }
 
         // update databaseuser
@@ -90,13 +90,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updatePassword(ChangePasswordRequest changePasswordRequest) throws InvalidDataException {
+    /**
+     * Updates the user password
+     * @param changePasswordRequest the request with an emailaddress and the new password
+     * @return the updated user
+     * @throws IllegalArgumentException throws then the email address does not exist in the database.
+     */
+    public User updatePassword(ChangePasswordRequest changePasswordRequest) throws IllegalArgumentException {
         boolean returnValue = false;
 
         User user = userRepository.findByEmailAddress(changePasswordRequest.Email.toLowerCase());
 
         if (user == null) {
-            throw new InvalidDataException("Email-address does not exist in database.");
+            throw new IllegalArgumentException("Email-address does not exist in database.");
         }
 
         user.setPassword(Password.hashPassword(changePasswordRequest.Password));

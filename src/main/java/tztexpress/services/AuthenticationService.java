@@ -1,6 +1,5 @@
 package tztexpress.services;
 
-import com.sun.media.sound.InvalidDataException;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This service authenticates all incoming requests when called. It checks the Authentication-header.
+ */
 @Service
 public class AuthenticationService {
 
@@ -25,8 +27,13 @@ public class AuthenticationService {
         this.userRepository = userRepository;
     }
 
-    // Hacky hacky hack, very fragile, treat with care
-    // TODO: If everything is validated, return a new token.
+    /**
+     * HACK HACK HACK - VERY FRAGILE - TREAT WITH CARE
+     * This mehtod validates the token. It will return true if the token is valid (within the timelimit, and with
+     * correct information about the user, username and password).
+     * @param authentication the encrypted validation token
+     * @return whether the token is valid or not
+     */
     public static boolean ValidateToken(List<String> authentication) {
         if (authentication.size() != 1) {
             return false;
@@ -61,8 +68,8 @@ public class AuthenticationService {
 
         DateTime timestamp = DateTime.parse(timestampString);
 
-        // if token is less than 30 minutes old, continue
-        if (((DateTime.now().getMillis() - timestamp.getMillis()) / (60 * 1000) % 60) > 30 ) {
+        // if token is less than 60 minutes old, continue
+        if (((DateTime.now().getMillis() - timestamp.getMillis()) / (60 * 1000) % 60) > 60 ) {
             return false;
         }
 
@@ -76,13 +83,20 @@ public class AuthenticationService {
         return Password.checkPassword(password, user.getPassword());
     }
 
-    public static String CreateToken(TokenRequest tokenRequest) throws UnsupportedEncodingException, InvalidDataException {
+    /**
+     * Creates a token based on the current time, email and password of the user.
+     * @param tokenRequest the requestobject with the email and password of the user
+     * @return a authentication token
+     * @throws UnsupportedEncodingException is thrown if the email and password cannot be encoded with UTF-8 encoding
+     * @throws IllegalArgumentException is thrown if the userdata is not correct (bad password or email)
+     */
+    public static String CreateToken(TokenRequest tokenRequest) throws UnsupportedEncodingException, IllegalArgumentException {
         // validate request before providing a token
         // validate password with database
         User user = userRepository.findByEmailAddress(tokenRequest.Email);
 
         if (user == null || !Password.checkPassword(tokenRequest.Password, user.getPassword())) {
-            throw new InvalidDataException("Invalid email or password");
+            throw new IllegalArgumentException("Invalid email or password");
         }
 
         String authString = tokenRequest.Email + ":" + tokenRequest.Password + ":" + DateTime.now();
@@ -94,7 +108,7 @@ public class AuthenticationService {
         try {
             returnValue = new String(encodedString, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            throw new InvalidDataException("Combination of username/password could not be encoded, please contact support");
+            throw new IllegalArgumentException("Combination of username/password could not be encoded, please contact support");
         }
 
         return returnValue;

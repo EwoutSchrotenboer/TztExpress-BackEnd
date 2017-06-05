@@ -9,8 +9,6 @@ import tztexpress.models.*;
 import tztexpress.services.AuthenticationService;
 import tztexpress.services.UserService;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/api/user")
 public class UserController {
@@ -21,23 +19,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public @ResponseBody List<User> listUsers(){
-        return userService.listAll();
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public @ResponseBody User getUser(@PathVariable String id){
-        return userService.getById(Long.valueOf(id));
-    }
-
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public @ResponseBody
-    GenericResult<User> createUser(@RequestBody UserModelRequest userModelRequest){
+    GenericResult<UserModel> createUser(@RequestBody UserModelRequest userModelRequest){
 
         try {
             User user = userService.create(userModelRequest);
-            return GenericResultHandler.GenericResult(user);
+            UserModel userModel = userService.UserToModel(user);
+            return GenericResultHandler.GenericResult(userModel);
         } catch (Exception ex) {
             return GenericResultHandler.GenericExceptionResult(ex);
         }
@@ -58,7 +47,6 @@ public class UserController {
         } else {
             return GenericResultHandler.GenericExceptionResult("Invalid authentication token");
         }
-
     }
 
     @RequestMapping(value = "/updatepassword", method = RequestMethod.POST)

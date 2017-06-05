@@ -1,7 +1,7 @@
 package tztexpress.models;
 
 /**
- * Created by Ewout on 3-6-2017.
+ * Usermodel , to return information to the front-end, does not contain (hashed) passwords
  */
 public class UserModel {
     public String Email;

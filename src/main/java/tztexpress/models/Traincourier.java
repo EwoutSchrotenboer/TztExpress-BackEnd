@@ -12,6 +12,7 @@ public class Traincourier {
     private Boolean vogApproved;
     private String identification;
     private Long userId;
+    private String email;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -55,6 +56,16 @@ public class Traincourier {
         this.userId = userId;
     }
 
+    @Basic
+    @Column(name = "email", nullable = false, length = 255)
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,6 +78,7 @@ public class Traincourier {
         if (identification != null ? !identification.equals(that.identification) : that.identification != null)
             return false;
         if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
 
         return true;
     }
@@ -77,6 +89,7 @@ public class Traincourier {
         result = 31 * result + (vogApproved != null ? vogApproved.hashCode() : 0);
         result = 31 * result + (identification != null ? identification.hashCode() : 0);
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
 }

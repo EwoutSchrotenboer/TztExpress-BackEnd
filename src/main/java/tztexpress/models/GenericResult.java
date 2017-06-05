@@ -1,7 +1,7 @@
 package tztexpress.models;
 
 /**
- * Created by Ewout on 14-5-2017.
+ * The generic result that gets returned for all api calls
  */
 public class GenericResult<T> {
     public boolean IsSuccess;

@@ -4,14 +4,19 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import tztexpress.enumerators.BiggestCities;
 import tztexpress.enumerators.CourierTypes;
 import tztexpress.enumerators.Status;
 import tztexpress.models.*;
+import tztexpress.services.TrainCourierService;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,20 +24,38 @@ import java.util.concurrent.TimeUnit;
  */
 @Repository
 public class RouteRepository {
+    /**
+     * The geoapicontext is the context for Google's directions api.
+     */
     private GeoApiContext context = new GeoApiContext();
-    private static final Double TRAINCOURIERPRICE = 6.0;
+
+    /**
+     * The traincourierprice is in €
+     * TODO: Refactor all constants to a new file
+     */
+    private static final Double TRAINCOURIERPRICE = 5.0;
+
+    /**
+     * The maximum distance the bicycle will win out over all other options if the package is within one of the 25
+     * biggest cities. Distance is in meters.
+     */
     private static final int MAXIMUMBICYCLEDISTANCECHEAPEST = 4000;
+
+    private TrainCourierService trainCourierService;
 
     /**
      * Initialize the repositories.RouteRepository
      */
-    public RouteRepository() {
+    @Autowired
+    public RouteRepository(TrainCourierService trainCourierService) {
         this.context = context
                 .setQueryRateLimit(3)
                 .setConnectTimeout(1, TimeUnit.SECONDS)
                 .setReadTimeout(1, TimeUnit.SECONDS)
                 .setWriteTimeout(1, TimeUnit.SECONDS)
                 .setApiKey("AIzaSyBdz5GYyufanHNIWY8QKnRqLKZuVlnxRYc");
+
+        this.trainCourierService = trainCourierService;
     }
 
     /**
@@ -51,6 +74,8 @@ public class RouteRepository {
             returnValue.Courier = cheapestCourier;
             returnValue.Type = cheapestCourier.Type.toString();
             returnValue.Status = Status.OK.toString();
+
+            // 20% markup voor Bernard Tromp
             returnValue.Courier.Cost *= 1.2;
             returnValue.Cost = cheapestCourier.Cost.toString();
 
@@ -106,7 +131,18 @@ public class RouteRepository {
             }
 
             CourierModel trainCourier = this.TrainCourierRoute(distanceTransit);
-            courierModelArrayList.add(trainCourier);
+
+            // Check database if a courier is available for this route.
+            String weekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
+
+            // Check if trainCourier is available for route
+            if (trainCourier.TrainCourier.OriginAddress != null && trainCourier.TrainCourier.DestinationAddress != null) {
+                AvailableTrainCourierModel availableCourier = this.trainCourierService.getTrainCourierForRoute(weekDay, trainCourier.TrainCourier.OriginAddress, trainCourier.TrainCourier.DestinationAddress);
+                if (availableCourier.isAvailable) {
+                    trainCourier.TrainCourier.TrainCourierDbId = availableCourier.traincourierId;
+                    courierModelArrayList.add(trainCourier);
+                }
+            }
         }
 
         return this.CalculateCheapestCourier(courierModelArrayList);
@@ -271,6 +307,9 @@ public class RouteRepository {
             returnValue += extraDistanceInKm * 0.40;
         }
 
+        // 10% discount on all external transport
+        returnValue = returnValue * 0.9;
+
         return returnValue;
 
     }
@@ -293,6 +332,9 @@ public class RouteRepository {
 
             returnValue += extraDistanceInKm * 0.39;
         }
+
+        // 10% discount on all external transport
+        returnValue = returnValue * 0.9;
 
         return returnValue;
     }
