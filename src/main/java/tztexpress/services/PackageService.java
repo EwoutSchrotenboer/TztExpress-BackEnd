@@ -131,6 +131,10 @@ public class PackageService {
     // FRAGILE, TREAT WITH CARE
     public AddressModel convertStringToAddress(String addressString) throws InvalidDataException {
         AddressModel returnValue = new AddressModel();
+        returnValue.address1 = new String();
+        returnValue.address2 = new String();
+        returnValue.zipcode = new String();
+        returnValue.city = new String();
 
         // Google directions api returns addresses in the following format
         // Address,Zipcode + City,Country
@@ -140,15 +144,15 @@ public class PackageService {
             throw new InvalidDataException("Could not convert the address to a model.");
         }
 
-        String address = stringArray[0];
-        String zipcodeCity = stringArray[1];
+        String address = new String(); // = stringArray[0];
+        String zipcodeCity = new String(); // = stringArray[1];
         // check here if address is the first, or the first two items. The zipcodeCity always starts with 4 digits.
         boolean zipcodeOccurred = false;
         for(String item : stringArray) {
             if(!zipcodeOccurred) {
                 // check if the string contains a zipcode
                 if(item.length() >= 4) {
-                    char[] itemArray = item.toCharArray();
+                    char[] itemArray = item.trim().toCharArray();
                     if(Character.isDigit(itemArray[0]) &&
                        Character.isDigit(itemArray[1]) &&
                        Character.isDigit(itemArray[2]) &&
@@ -157,36 +161,39 @@ public class PackageService {
 
                         zipcodeCity += item;
                         zipcodeCity += " ";
+                    } else {
+                        address += item;
+                        address += " ";
                     }
+                } else {
+                    address += item;
+                    address += " ";
                 }
-
-                address += item;
-                address += " ";
             } else {
                 zipcodeCity += item;
                 zipcodeCity += " ";
             }
         }
 
-        address.trim();
-        zipcodeCity.trim();
+        address = address.trim();
+        zipcodeCity = zipcodeCity.trim();
 
         // We can assume everything after the first numbers in Address should belong in address2
         boolean numbersOccurred = false;
 
         for(String subString : address.split(" ")) {
 
-            if (this.isNumeric(subString)) {
-                numbersOccurred = true;
-            }
+            if(!numbersOccurred) {
+                if (this.isNumeric(subString)) {
+                    numbersOccurred = true;
+                }
 
-            if(numbersOccurred) {
                 returnValue.address1 += subString + " ";
             } else {
                 returnValue.address2 += subString + " ";
             }
-
         }
+
         returnValue.address1 = returnValue.address1.trim();
         returnValue.address2 = returnValue.address2.trim();
 
@@ -200,17 +207,19 @@ public class PackageService {
 
                 if(firstLoop) {
                     returnValue.zipcode += " ";
+                    firstLoop = false;
                 }
             }
             else {
                 returnValue.city += subString;
                 returnValue.city += " ";
             }
-            firstLoop = false;
+
         }
 
         returnValue.zipcode = returnValue.zipcode.trim();
-        returnValue.city = returnValue.city.trim();
+        // Remove country if it is present.
+        returnValue.city = returnValue.city.replace("Netherlands", "").trim();
 
         return returnValue;
     }
