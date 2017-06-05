@@ -36,11 +36,25 @@ public class PackageService {
         this.userService = userService;
     }
 
-    public List<Package> listAll() {
+    /**
+     * Lists all pakages in packagemodels
+     * WARNING: EXPENSIVE CALL, ONLY USE FOR BACKOFFICE
+     * @return
+     */
+    public List<PackageModel> listAll() {
         List<Package> packages = new ArrayList<>();
+        List<PackageModel> returnValue = new ArrayList<>();
+
         packageRepository.findAll().forEach(packages::add);
-        return packages;
+
+        for(Package pack : packages) {
+            returnValue.add(this.getPackageModel(pack.getId()));
+        }
+
+        return returnValue;
     }
+
+
 
     public Package getById(Long id) {
 
