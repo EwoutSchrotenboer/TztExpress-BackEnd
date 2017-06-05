@@ -34,7 +34,7 @@ public class PackageController {
      * @return the list of packages
      */
     @RequestMapping(value = "/packages", method = RequestMethod.GET)
-    public @ResponseBody GenericResult<List<Package>> listPackages(@RequestHeader HttpHeaders headers)
+    public @ResponseBody GenericResult<List<PackageModel>> listPackages(@RequestHeader HttpHeaders headers)
     {
         if(AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {
             return GenericResultHandler.GenericResult(packageService.listAll());
