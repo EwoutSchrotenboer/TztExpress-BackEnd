@@ -1,6 +1,5 @@
 package tztexpress.services;
 
-import com.sun.media.sound.InvalidDataException;
 import tztexpress.enumerators.CourierTypes;
 import tztexpress.models.*;
 import tztexpress.models.Package;
@@ -8,7 +7,6 @@ import tztexpress.repositories.ExternalCourierRepository;
 import tztexpress.repositories.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tztexpress.repositories.ShipmentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +52,9 @@ public class PackageService {
         packageRepository.delete(id);
     }
 
-    public Package createPackage(PackageRequestModel packageRequestModel) throws InvalidDataException {
+    public Package createPackage(PackageRequestModel packageRequestModel) throws IllegalArgumentException {
         if (packageRequestModel.CourierChoiceModel == null) {
-            throw new InvalidDataException("Route information is not provided.");
+            throw new IllegalArgumentException("Route information is not provided.");
         }
         CourierChoiceModel courierChoiceModel = packageRequestModel.CourierChoiceModel;
         CourierModel courier = courierChoiceModel.Courier;
@@ -129,7 +127,7 @@ public class PackageService {
 
     // HACK HACK HACK
     // FRAGILE, TREAT WITH CARE
-    public AddressModel convertStringToAddress(String addressString) throws InvalidDataException {
+    public AddressModel convertStringToAddress(String addressString) throws IllegalArgumentException {
         AddressModel returnValue = new AddressModel();
         returnValue.address1 = new String();
         returnValue.address2 = new String();
@@ -141,7 +139,7 @@ public class PackageService {
         String[] stringArray = addressString.split(",");
 
         if(stringArray.length < 3) {
-            throw new InvalidDataException("Could not convert the address to a model.");
+            throw new IllegalArgumentException("Could not convert the address to a model.");
         }
 
         String address = new String(); // = stringArray[0];

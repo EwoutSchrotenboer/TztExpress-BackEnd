@@ -1,6 +1,5 @@
 package tztexpress.services;
 
-import com.sun.media.sound.InvalidDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tztexpress.models.Address;
@@ -24,7 +23,7 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    public Address getAddress(AddressModel addressModel) throws InvalidDataException {
+    public Address getAddress(AddressModel addressModel) throws IllegalArgumentException {
         // check if address is complete:
         if (validAddress(addressModel)) {
             return addressRepository.findAddress(addressModel.address1, addressModel.address2, addressModel.zipcode, addressModel.city);
@@ -34,7 +33,7 @@ public class AddressService {
 
     }
 
-    public Address createAddress(AddressModel addressModel) throws InvalidDataException {
+    public Address createAddress(AddressModel addressModel) throws IllegalArgumentException {
         if(validAddress(addressModel)) {
             Address newAddress = new Address();
 
@@ -55,12 +54,12 @@ public class AddressService {
         return null;
     }
 
-    public Address updateAddress(ChangeAddressModel addressModel) throws InvalidDataException {
+    public Address updateAddress(ChangeAddressModel addressModel) throws IllegalArgumentException {
         if(validAddress(addressModel)) {
             Address address = addressRepository.findOne(addressModel.Id);
 
             if(address == null) {
-                throw new InvalidDataException("Invalid address Id: " + addressModel.Id);
+                throw new IllegalArgumentException("Invalid address Id: " + addressModel.Id);
             }
 
             if (addressModel.address1 != null) {
@@ -86,7 +85,7 @@ public class AddressService {
         return null;
     }
 
-    public static boolean validAddress(AddressModel addressModel) throws InvalidDataException {
+    public static boolean validAddress(AddressModel addressModel) throws IllegalArgumentException {
         if (addressModel.address1 == null || addressModel.zipcode == null || addressModel.city == null) {
             String exceptionMessage = new String();
 
@@ -94,7 +93,7 @@ public class AddressService {
             exceptionMessage += (addressModel.zipcode == null ? "Zipcode not set" : addressModel.zipcode) + ", ";
             exceptionMessage += (addressModel.city == null ? "City not set" : addressModel.city) + ".";
 
-            throw new InvalidDataException(String.format("Invalid address: %s", exceptionMessage));
+            throw new IllegalArgumentException(String.format("Invalid address: %s", exceptionMessage));
         }
 
         // validate zipcode
@@ -104,11 +103,11 @@ public class AddressService {
         if (match.matches()) {
             return true;
         } else {
-            throw new InvalidDataException(String.format("Invalid format for zipcode: %s", addressModel.zipcode));
+            throw new IllegalArgumentException(String.format("Invalid format for zipcode: %s", addressModel.zipcode));
         }
     }
 
-    public Address findOrCreateAddress(AddressModel addressModel) throws InvalidDataException {
+    public Address findOrCreateAddress(AddressModel addressModel) throws IllegalArgumentException {
         Address returnValue;
 
         returnValue = this.getAddress(addressModel);

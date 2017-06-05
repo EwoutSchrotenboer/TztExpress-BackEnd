@@ -1,6 +1,5 @@
 package tztexpress.services;
 
-import com.sun.media.sound.InvalidDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tztexpress.core.Password;
@@ -19,13 +18,13 @@ public class UserService {
         this.addressService = addressService;
     }
 
-    public User create(UserModelRequest userModel) throws InvalidDataException {
+    public User create(UserModelRequest userModel) throws IllegalArgumentException {
 
         // check if user exists in database
         User user = userRepository.findByEmailAddress(userModel.email.toLowerCase());
 
         if (user != null) {
-            throw new InvalidDataException("Email-address already exists in database.");
+            throw new IllegalArgumentException("Email-address already exists in database.");
         }
 
         // otherwise, create new user
@@ -51,12 +50,12 @@ public class UserService {
             return userRepository.save(newUser);
     }
 
-    public User update(UserModelRequest userModel) throws InvalidDataException {
+    public User update(UserModelRequest userModel) throws IllegalArgumentException {
         // Get user from database:
         User user = userRepository.findByEmailAddress(userModel.email);
 
         if (user == null) {
-            throw new InvalidDataException("Email-address does not exist in database.");
+            throw new IllegalArgumentException("Email-address does not exist in database.");
         }
 
         // update databaseuser
@@ -75,13 +74,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updatePassword(ChangePasswordRequest changePasswordRequest) throws InvalidDataException {
+    public User updatePassword(ChangePasswordRequest changePasswordRequest) throws IllegalArgumentException {
         boolean returnValue = false;
 
         User user = userRepository.findByEmailAddress(changePasswordRequest.Email.toLowerCase());
 
         if (user == null) {
-            throw new InvalidDataException("Email-address does not exist in database.");
+            throw new IllegalArgumentException("Email-address does not exist in database.");
         }
 
         user.setPassword(Password.hashPassword(changePasswordRequest.Password));
