@@ -15,6 +15,7 @@ import tztexpress.services.TrainCourierService;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -126,7 +127,9 @@ public class RouteRepository {
 
             // Check if trainCourier is available for route
             if (this.firstTrainStation != null && this.lastTrainStation != null) {
-                if (this.trainCourierService.isTrainCourierAvailable(weekDay, this.firstTrainStation, this.lastTrainStation)) {
+                AvailableTrainCourierModel availableCourier = this.trainCourierService.getTrainCourierForRoute(weekDay, this.firstTrainStation, this.lastTrainStation);
+                if (availableCourier.isAvailable) {
+                    trainCourier.TrainCourierDbId = availableCourier.traincourierId;
                     courierModelArrayList.add(trainCourier);
                 }
             }

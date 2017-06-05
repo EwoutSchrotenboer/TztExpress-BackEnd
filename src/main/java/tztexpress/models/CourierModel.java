@@ -20,6 +20,7 @@ public class CourierModel extends BaseModel {
     }
     public CourierTypes Type;
     public Double Cost;
+    public long TrainCourierDbId;
 
     // Used for First/Last-leg couriers for traincouriers
     public CourierModel OriginCourier;

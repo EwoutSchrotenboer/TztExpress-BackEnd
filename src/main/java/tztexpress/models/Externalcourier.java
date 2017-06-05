@@ -10,6 +10,7 @@ import javax.persistence.*;
 public class Externalcourier {
     private Long id;
     private String companyname;
+    private String type;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -33,6 +34,16 @@ public class Externalcourier {
         this.companyname = companyname;
     }
 
+    @Basic
+    @Column(name = "type", nullable = false, length = 255)
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -42,6 +53,7 @@ public class Externalcourier {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (companyname != null ? !companyname.equals(that.companyname) : that.companyname != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
 
         return true;
     }
@@ -50,6 +62,7 @@ public class Externalcourier {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (companyname != null ? companyname.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }
 }

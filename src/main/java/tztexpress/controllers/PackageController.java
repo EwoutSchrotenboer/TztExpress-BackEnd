@@ -48,7 +48,11 @@ public class PackageController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public @ResponseBody GenericResult<Package> createPackage(@RequestHeader HttpHeaders headers, @RequestBody PackageRequestModel packageRequestModel) {
         if(AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {
-            return GenericResultHandler.GenericResult(packageService.createPackage(packageRequestModel));
+            try {
+                return GenericResultHandler.GenericResult(packageService.createPackage(packageRequestModel));
+            } catch (Exception ex) {
+                return GenericResultHandler.GenericExceptionResult(ex);
+            }
         } else {
             return GenericResultHandler.GenericExceptionResult("Invalid authentication token");
         }
