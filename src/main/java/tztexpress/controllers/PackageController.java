@@ -3,12 +3,10 @@ package tztexpress.controllers;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import tztexpress.core.GenericResultHandler;
-import tztexpress.models.GenericResult;
-import tztexpress.models.Package;
+import tztexpress.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import tztexpress.models.PackageModel;
-import tztexpress.models.PackageRequestModel;
+import tztexpress.models.Package;
 import tztexpress.services.AuthenticationService;
 import tztexpress.services.PackageService;
 
@@ -56,7 +54,6 @@ public class PackageController {
     public @ResponseBody GenericResult<PackageModel> getPackage(@RequestHeader HttpHeaders headers, @PathVariable String id) {
         if(AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {
             PackageModel returnValue = this.packageService.getPackageModel(Long.valueOf(id));
-
             return GenericResultHandler.GenericResult(returnValue);
         } else {
             return GenericResultHandler.GenericExceptionResult("Invalid authentication token");
@@ -73,7 +70,8 @@ public class PackageController {
     public @ResponseBody GenericResult<Package> createPackage(@RequestHeader HttpHeaders headers, @RequestBody PackageRequestModel packageRequestModel) {
         if(AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {
             try {
-                return GenericResultHandler.GenericResult(packageService.createPackage(packageRequestModel));
+                User user = AuthenticationService.getUserFromToken(headers.getValuesAsList("Authentication"));
+                return GenericResultHandler.GenericResult(packageService.createPackage(packageRequestModel, user));
             } catch (Exception ex) {
                 return GenericResultHandler.GenericExceptionResult(ex);
             }

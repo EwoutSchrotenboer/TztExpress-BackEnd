@@ -113,4 +113,32 @@ public class AuthenticationService {
 
         return returnValue;
     }
+
+    /**
+     * Hacky implementation to get the user from an authentication token
+     * @param authentication the auth token
+     * @return the user
+     */
+    public static User getUserFromToken(List<String> authentication) {
+
+        String authenticationStringEncoded = authentication.get(0);
+        byte[] authByteArray = Base64.decodeBase64(authenticationStringEncoded.getBytes());
+
+        String authString;
+        try {
+            authString = new String(authByteArray, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            // We can assume the token string is correct, as it is validated before this point.
+            return null;
+        }
+
+        Map<String, String> authenticationElements = new HashMap<String, String>();
+
+        // We can assume here that the string is always in the right order.
+        String[] stringArray = authString.split(":");
+
+        String email = stringArray[0];
+
+        return userRepository.findByEmailAddress(email);
+    }
 }

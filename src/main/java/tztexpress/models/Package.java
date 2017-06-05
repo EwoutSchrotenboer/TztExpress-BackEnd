@@ -15,6 +15,7 @@ public class Package {
     private String value;
     private String details;
     private Boolean isDelivered;
+    private Long userId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -88,6 +89,16 @@ public class Package {
         this.isDelivered = isDelivered;
     }
 
+    @Basic
+    @Column(name = "userid")
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,6 +115,7 @@ public class Package {
         if (value != null ? !value.equals(aPackage.value) : aPackage.value != null) return false;
         if (details != null ? !details.equals(aPackage.details) : aPackage.details != null) return false;
         if (isDelivered != null ? !isDelivered.equals(aPackage.isDelivered) : aPackage.isDelivered != null) return false;
+        if (userId != null ? !userId.equals(aPackage.userId) : aPackage.userId != null) return false;
         return true;
     }
 
@@ -116,6 +128,7 @@ public class Package {
         result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
         result = 31 * result + (isDelivered != null ? isDelivered.hashCode() : 0);
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
         return result;
     }
 }
