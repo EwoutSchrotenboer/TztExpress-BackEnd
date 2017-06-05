@@ -247,7 +247,7 @@ public class PackageService {
         returnValue.value = pack.getValue();
         returnValue.isDelivered = pack.getIsDelivered();
 
-        returnValue.sender = this.userService.getById(pack.getUserId());
+        returnValue.sender = this.userService.UserToModel(this.userService.getById(pack.getUserId()));
         returnValue.origin = this.addressService.getAddress(pack.getOriginAddressId());
         returnValue.destination = this.addressService.getAddress(pack.getDestinationAddressId());
         returnValue.shipments = this.shipmentService.getShipmentsForPackage(pack.getId());
