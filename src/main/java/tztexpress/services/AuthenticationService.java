@@ -1,6 +1,5 @@
 package tztexpress.services;
 
-import com.sun.media.sound.InvalidDataException;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,13 +75,13 @@ public class AuthenticationService {
         return Password.checkPassword(password, user.getPassword());
     }
 
-    public static String CreateToken(TokenRequest tokenRequest) throws UnsupportedEncodingException, InvalidDataException {
+    public static String CreateToken(TokenRequest tokenRequest) throws UnsupportedEncodingException, IllegalArgumentException {
         // validate request before providing a token
         // validate password with database
         User user = userRepository.findByEmailAddress(tokenRequest.Email);
 
         if (user == null || !Password.checkPassword(tokenRequest.Password, user.getPassword())) {
-            throw new InvalidDataException("Invalid email or password");
+            throw new IllegalArgumentException("Invalid email or password");
         }
 
         String authString = tokenRequest.Email + ":" + tokenRequest.Password + ":" + DateTime.now();
@@ -94,7 +93,7 @@ public class AuthenticationService {
         try {
             returnValue = new String(encodedString, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            throw new InvalidDataException("Combination of username/password could not be encoded, please contact support");
+            throw new IllegalArgumentException("Combination of username/password could not be encoded, please contact support");
         }
 
         return returnValue;
