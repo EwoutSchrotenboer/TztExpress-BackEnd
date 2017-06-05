@@ -77,10 +77,10 @@ public class AddressService {
      */
     public Address updateAddress(ChangeAddressModel addressModel) throws IllegalArgumentException {
         if(validAddress(addressModel)) {
-            Address address = addressRepository.findOne(addressModel.Id);
+            Address address = addressRepository.findOne(addressModel.id);
 
             if(address == null) {
-                throw new IllegalArgumentException("Invalid address Id: " + addressModel.Id);
+                throw new IllegalArgumentException("Invalid address Id: " + addressModel.id);
             }
 
             if (addressModel.address1 != null) {

@@ -15,7 +15,6 @@ import tztexpress.services.TrainCourierService;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -70,20 +69,20 @@ public class RouteRepository {
 
         CourierModel cheapestCourier = this.GetCheapestCourier(origin, destination, true);
 
-        if(cheapestCourier != null && cheapestCourier.Type != null) {
-            returnValue.Courier = cheapestCourier;
-            returnValue.Type = cheapestCourier.Type.toString();
-            returnValue.Status = Status.OK.toString();
+        if(cheapestCourier != null && cheapestCourier.type != null) {
+            returnValue.courier = cheapestCourier;
+            returnValue.type = cheapestCourier.type.toString();
+            returnValue.status = Status.OK.toString();
 
             // 20% markup voor Bernard Tromp
-            returnValue.Courier.Cost *= 1.2;
-            returnValue.Cost = cheapestCourier.Cost.toString();
+            returnValue.courier.cost *= 1.2;
+            returnValue.cost = cheapestCourier.cost.toString();
 
-            returnValue.OriginAddress = cheapestCourier.OriginAddress;
-            returnValue.DestinationAddress = cheapestCourier.DestinationAddress;
+            returnValue.originaddress = cheapestCourier.originaddress;
+            returnValue.destinationaddress = cheapestCourier.destinationaddress;
         } else {
-            returnValue.Status = Status.ERROR.toString();
-            returnValue.AdditionalInformation = "Courier could not be calculated, please contact support.";
+            returnValue.status = Status.ERROR.toString();
+            returnValue.additionalinformation = "Route could not be calculated, please contact support.";
         }
 
         return returnValue;
@@ -136,10 +135,10 @@ public class RouteRepository {
             String weekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
 
             // Check if trainCourier is available for route
-            if (trainCourier.TrainCourier.OriginAddress != null && trainCourier.TrainCourier.DestinationAddress != null) {
-                AvailableTrainCourierModel availableCourier = this.trainCourierService.getTrainCourierForRoute(weekDay, trainCourier.TrainCourier.OriginAddress, trainCourier.TrainCourier.DestinationAddress);
-                if (availableCourier.isAvailable) {
-                    trainCourier.TrainCourier.TrainCourierDbId = availableCourier.traincourierId;
+            if (trainCourier.traincourier.originaddress != null && trainCourier.traincourier.destinationaddress != null) {
+                AvailableTrainCourierModel availableCourier = this.trainCourierService.getTrainCourierForRoute(weekDay, trainCourier.traincourier.originaddress, trainCourier.traincourier.destinationaddress);
+                if (availableCourier.isavailable) {
+                    trainCourier.traincourier.traincourierdbid = availableCourier.traincourierid;
                     courierModelArrayList.add(trainCourier);
                 }
             }
@@ -179,25 +178,25 @@ public class RouteRepository {
             CourierModel cheapestDestinationCourier = this.GetCheapestCourier(lastTrainStation, destination, false);
 
             // combine prices for first/train/last leg, then compare them with the other prices
-            if(cheapestOriginCourier != null && cheapestOriginCourier.Cost != null &&
-               cheapestDestinationCourier != null && cheapestDestinationCourier.Cost != null) {
-                returnValue.Cost = TRAINCOURIERPRICE + cheapestOriginCourier.Cost + cheapestDestinationCourier.Cost;
-                returnValue.OriginCourier = cheapestOriginCourier;
-                returnValue.DestinationCourier = cheapestDestinationCourier;
+            if(cheapestOriginCourier != null && cheapestOriginCourier.cost != null &&
+               cheapestDestinationCourier != null && cheapestDestinationCourier.cost != null) {
+                returnValue.cost = TRAINCOURIERPRICE + cheapestOriginCourier.cost + cheapestDestinationCourier.cost;
+                returnValue.origincourier = cheapestOriginCourier;
+                returnValue.destinationcourier = cheapestDestinationCourier;
 
-                returnValue.TrainCourier = new CourierModel(CourierTypes.TRAINCOURIER, TRAINCOURIERPRICE);
-                returnValue.TrainCourier.OriginAddress = firstTrainStation;
-                returnValue.TrainCourier.DestinationAddress = lastTrainStation;
-                returnValue.Available = true;
+                returnValue.traincourier = new CourierModel(CourierTypes.TRAINCOURIER, TRAINCOURIERPRICE);
+                returnValue.traincourier.originaddress = firstTrainStation;
+                returnValue.traincourier.destinationaddress = lastTrainStation;
+                returnValue.available = true;
             } else {
-                returnValue.Available = false;
+                returnValue.available = false;
             }
         } else {
-            returnValue.Available = false;
+            returnValue.available = false;
         }
 
-        returnValue.OriginAddress = origin;
-        returnValue.DestinationAddress = destination;
+        returnValue.originaddress = origin;
+        returnValue.destinationaddress = destination;
         return returnValue;
     }
 
@@ -211,18 +210,18 @@ public class RouteRepository {
     private CourierModel DrivingCourierRoute(DirectionsResult distanceDriving, CourierTypes courierType) {
         CourierModel returnValue = new CourierModel(courierType);
 
-        if (returnValue.Type.equals(CourierTypes.MESSENGERCOURIER)) {
-            returnValue.Cost = this.CalculateMessengerCourierCosts(distanceDriving);
-        } else if (returnValue.Type.equals(CourierTypes.TRANSPORTCOURIER)) {
-            returnValue.Cost = this.CalculateTransportCourierCosts(distanceDriving);
+        if (returnValue.type.equals(CourierTypes.MESSENGERCOURIER)) {
+            returnValue.cost = this.CalculateMessengerCourierCosts(distanceDriving);
+        } else if (returnValue.type.equals(CourierTypes.TRANSPORTCOURIER)) {
+            returnValue.cost = this.CalculateTransportCourierCosts(distanceDriving);
         }
 
-        if (returnValue.Cost != null) {
-            returnValue.Available = true;
+        if (returnValue.cost != null) {
+            returnValue.available = true;
         }
 
-        returnValue.OriginAddress = distanceDriving.routes[0].legs[0].startAddress;
-        returnValue.DestinationAddress = distanceDriving.routes[0].legs[0].endAddress;
+        returnValue.originaddress = distanceDriving.routes[0].legs[0].startAddress;
+        returnValue.destinationaddress = distanceDriving.routes[0].legs[0].endAddress;
 
         return returnValue;
     }
@@ -239,26 +238,26 @@ public class RouteRepository {
     private CourierModel BicycleCourierRoute(DirectionsResult distanceBicycling, boolean fullRoute) {
         CourierModel returnValue = new CourierModel(CourierTypes.BICYCLECOURIER);
 
-        returnValue.OriginAddress = distanceBicycling.routes[0].legs[0].startAddress;
-        returnValue.DestinationAddress = distanceBicycling.routes[0].legs[0].endAddress;
+        returnValue.originaddress = distanceBicycling.routes[0].legs[0].startAddress;
+        returnValue.destinationaddress = distanceBicycling.routes[0].legs[0].endAddress;
 
-        boolean originBigCity = this.CheckBiggestCities(returnValue.OriginAddress);
+        boolean originBigCity = this.CheckBiggestCities(returnValue.originaddress);
 
         if (originBigCity) {
-            returnValue.Available = true;
+            returnValue.available = true;
 
             if (fullRoute && distanceBicycling.routes[0].legs[0].distance.inMeters < MAXIMUMBICYCLEDISTANCECHEAPEST) {
                 // If the route is within one of the 25 biggest cities and shorter than 4km, this option is always
                 // the cheapest. Skip the other API-calls and return the cycling route.
-                returnValue.Cost = this.CalculateBicycleCourierCosts(distanceBicycling);
-                returnValue.IsCheapestOption = true;
+                returnValue.cost = this.CalculateBicycleCourierCosts(distanceBicycling);
+                returnValue.ischeapestoption = true;
                 return returnValue;
 
             } else {
-                returnValue.Cost = this.CalculateBicycleCourierCosts(distanceBicycling);
+                returnValue.cost = this.CalculateBicycleCourierCosts(distanceBicycling);
             }
         } else {
-            returnValue.Available = false;
+            returnValue.available = false;
         }
 
         return returnValue;
@@ -390,10 +389,10 @@ public class RouteRepository {
         CourierModel cheapestCourier = new CourierModel(null);
 
         for (CourierModel courier : courierList) {
-            if (courier.Available && cheapestCourier.Type == null) {
+            if (courier.available && cheapestCourier.type == null) {
                 cheapestCourier = courier;
             }
-            if (courier.Available && courier.Cost != null && (cheapestCourier.Cost == null || courier.Cost <= cheapestCourier.Cost)) {
+            if (courier.available && courier.cost != null && (cheapestCourier.cost == null || courier.cost <= cheapestCourier.cost)) {
                 cheapestCourier = courier;
             }
         }

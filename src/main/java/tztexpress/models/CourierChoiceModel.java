@@ -10,26 +10,26 @@ public class CourierChoiceModel extends BaseModel {
     /**
      * The main courier
      */
-    public CourierModel Courier;
+    public CourierModel courier;
 
     /**
      * The type of the courier
      */
-    public String Type;
+    public String type;
 
     /**
      * Additional information, currently not in use.
      */
-    public String AdditionalInformation;
+    public String additionalinformation;
 
     /**
      * Status of the route calculation
      */
-    public String Status;
+    public String status;
 
-    public String OriginAddress;
-    public String DestinationAddress;
+    public String originaddress;
+    public String destinationaddress;
 
     // Note: Cost is set to String here, because the JSON somehow truncates the values.
-    public String Cost;
+    public String cost;
 }

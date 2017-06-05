@@ -18,8 +18,8 @@ public class GenericResultHandler {
      */
     public static <T> GenericResult<T> GenericResult(T model) {
         GenericResult<T> returnValue = new GenericResult<>();
-        returnValue.IsSuccess = true;
-        returnValue.Model = model;
+        returnValue.issuccess = true;
+        returnValue.model = model;
         return returnValue;
     }
 
@@ -46,21 +46,21 @@ public class GenericResultHandler {
      */
     public static <T> GenericResult<T> GenericExceptionResult(Exception ex) {
         GenericResult<T> returnValue = new GenericResult<>();
-        returnValue.IsSuccess = false;
+        returnValue.issuccess = false;
 
         ExceptionModel exModel = new ExceptionModel();
 
         // Check if the application is in debugging mode - if not, do not include full exception/stacktrace
         // TODO: Refactor this to a solution-specific option of adding debugparameters, for remote debugging.
         if(java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("-agentlib:jdwp") > 0) {
-            exModel.Exception = ex.toString();
-            exModel.StackTrace = ex.getStackTrace().toString();
-            exModel.Message = ex.getMessage();
+            exModel.exception = ex.toString();
+            exModel.stacktrace = ex.getStackTrace().toString();
+            exModel.message = ex.getMessage();
         } else {
-            exModel.Message = "An error has occurred, please contact support.";
+            exModel.message = "An error has occurred, please contact support.";
         }
 
-        returnValue.Exception = exModel;
+        returnValue.exception = exModel;
 
         return returnValue;
     }
