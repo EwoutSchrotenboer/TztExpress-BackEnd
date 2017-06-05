@@ -18,6 +18,7 @@ public class PackageService {
     private ShipmentService shipmentService;
     private AddressService addressService;
     private TrainCourierService trainCourierService;
+    private UserService userService;
     private ExternalCourierRepository externalCourierRepository;
 
     @Autowired
@@ -25,12 +26,14 @@ public class PackageService {
                           AddressService addressService,
                           ShipmentService shipmentService,
                           TrainCourierService trainCourierService,
-                          ExternalCourierRepository externalCourierRepository) {
+                          ExternalCourierRepository externalCourierRepository,
+                          UserService userService) {
         this.packageRepository = packageRepository;
         this.addressService = addressService;
         this.shipmentService = shipmentService;
         this.trainCourierService = trainCourierService;
         this.externalCourierRepository = externalCourierRepository;
+        this.userService = userService;
     }
 
     public List<Package> listAll() {
@@ -52,7 +55,7 @@ public class PackageService {
         packageRepository.delete(id);
     }
 
-    public Package createPackage(PackageRequestModel packageRequestModel) throws IllegalArgumentException {
+    public Package createPackage(PackageRequestModel packageRequestModel, User user) throws IllegalArgumentException {
         if (packageRequestModel.courierchoicemodel == null) {
             throw new IllegalArgumentException("Route information is not provided.");
         }
@@ -61,6 +64,7 @@ public class PackageService {
 
         // Create package
         Package pack = new Package();
+        pack.setUserId(user.getId());
         pack.setValue(packageRequestModel.value);
         pack.setWeight(packageRequestModel.weight);
         pack.setDetails(packageRequestModel.details);
@@ -235,10 +239,29 @@ public class PackageService {
         return true;
     }
 
-    public PackageModel getPackageModel(Long aLong) {
+    public PackageModel getPackageModel(Long id) {
         PackageModel returnValue = new PackageModel();
+        Package pack = this.getById(id);
+        returnValue.id = pack.getId();
+        returnValue.details = pack.getDetails();
+        returnValue.value = pack.getValue();
+        returnValue.isDelivered = pack.getIsDelivered();
 
-        return returnValue; 
+        returnValue.sender = this.userService.getById(pack.getUserId());
+        returnValue.origin = this.addressService.getAddress(pack.getOriginAddressId());
+        returnValue.destination = this.addressService.getAddress(pack.getDestinationAddressId());
+        returnValue.shipments = this.shipmentService.getShipmentsForPackage(pack.getId());
+
+        // get couriers from shipments
+        for(Shipment s : returnValue.shipments) {
+            if (s.getCouriertype() == CourierTypes.TRAINCOURIER.toString()) {
+                returnValue.traincourier = this.trainCourierService.getById(s.getTraincourierId());
+            } else {
+                returnValue.externalcouriers.add(this.externalCourierRepository.findOne(s.getExternalcourierId()));
+            }
+        }
+
+        return returnValue;
 
     }
 }
