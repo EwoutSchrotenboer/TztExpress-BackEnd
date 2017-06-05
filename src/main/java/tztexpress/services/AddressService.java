@@ -40,6 +40,10 @@ public class AddressService {
         return null;
     }
 
+    public Address getAddress(long id) {
+        return addressRepository.findOne(id);
+    }
+
     /**
      * Creates an address in the database with the provided information
      * @param addressModel the address model

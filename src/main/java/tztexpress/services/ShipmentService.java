@@ -2,9 +2,12 @@ package tztexpress.services;
 
 import tztexpress.enumerators.CourierTypes;
 import tztexpress.models.Shipment;
+import tztexpress.models.User;
 import tztexpress.repositories.ShipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * This service creates a shipment, for a package.
@@ -17,6 +20,15 @@ public class ShipmentService {
     @Autowired
     public ShipmentService(ShipmentRepository shipmentRepository) {
         this.shipmentRepository = shipmentRepository;
+    }
+
+    /**
+     * Gets the shipments for this package
+     * @param id the packageId
+     * @return a list of shipments
+     */
+    public List<Shipment> getShipmentsForPackage(long id) {
+        return this.shipmentRepository.getShipmentsForPackage(id);
     }
 
     /**

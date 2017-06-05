@@ -21,6 +21,15 @@ public class UserService {
         this.addressService = addressService;
     }
 
+
+    /**
+     * Gets one user by the userId
+     * @param id the userId
+     * @return the found user
+     */
+    public User getById(long id) {
+        return this.userRepository.findOne(id);
+    }
     /**
      * Creates the user with the corresponding information from the provided usermodel
      * @param userModel the model with the userinformation

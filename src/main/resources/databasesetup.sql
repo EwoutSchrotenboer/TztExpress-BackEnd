@@ -5,7 +5,7 @@
 -- Dumped from database version 9.6.3
 -- Dumped by pg_dump version 9.6.3
 
--- Started on 2017-06-05 13:36:15
+-- Started on 2017-06-05 17:21:55
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,7 +17,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 2208 (class 1262 OID 16414)
+-- TOC entry 2209 (class 1262 OID 16414)
 -- Name: tztexpress; Type: DATABASE; Schema: -; Owner: postgres
 --
 
@@ -38,7 +38,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 2209 (class 0 OID 0)
+-- TOC entry 2210 (class 0 OID 0)
 -- Dependencies: 3
 -- Name: SCHEMA "public"; Type: COMMENT; Schema: -; Owner: postgres
 --
@@ -55,7 +55,7 @@ CREATE EXTENSION IF NOT EXISTS "plpgsql" WITH SCHEMA "pg_catalog";
 
 
 --
--- TOC entry 2210 (class 0 OID 0)
+-- TOC entry 2211 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION "plpgsql"; Type: COMMENT; Schema: -; Owner: 
 --
@@ -101,7 +101,7 @@ CREATE SEQUENCE "address_id_seq"
 ALTER TABLE "address_id_seq" OWNER TO "postgres";
 
 --
--- TOC entry 2211 (class 0 OID 0)
+-- TOC entry 2212 (class 0 OID 0)
 -- Dependencies: 187
 -- Name: address_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -140,7 +140,7 @@ CREATE SEQUENCE "externalcourier_id_seq"
 ALTER TABLE "externalcourier_id_seq" OWNER TO "postgres";
 
 --
--- TOC entry 2212 (class 0 OID 0)
+-- TOC entry 2213 (class 0 OID 0)
 -- Dependencies: 195
 -- Name: externalcourier_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -160,7 +160,8 @@ CREATE TABLE "package" (
     "weight" bigint NOT NULL,
     "value" character varying(255) NOT NULL,
     "details" character varying(255),
-    "isdelivered" boolean
+    "isdelivered" boolean,
+    "userid" bigint NOT NULL
 );
 
 
@@ -182,7 +183,7 @@ CREATE SEQUENCE "package_id_seq"
 ALTER TABLE "package_id_seq" OWNER TO "postgres";
 
 --
--- TOC entry 2213 (class 0 OID 0)
+-- TOC entry 2214 (class 0 OID 0)
 -- Dependencies: 197
 -- Name: package_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -220,7 +221,7 @@ CREATE SEQUENCE "route_id_seq"
 ALTER TABLE "route_id_seq" OWNER TO "postgres";
 
 --
--- TOC entry 2214 (class 0 OID 0)
+-- TOC entry 2215 (class 0 OID 0)
 -- Dependencies: 191
 -- Name: route_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -263,7 +264,7 @@ CREATE SEQUENCE "shipment_id_seq"
 ALTER TABLE "shipment_id_seq" OWNER TO "postgres";
 
 --
--- TOC entry 2215 (class 0 OID 0)
+-- TOC entry 2216 (class 0 OID 0)
 -- Dependencies: 199
 -- Name: shipment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -303,7 +304,7 @@ CREATE SEQUENCE "traincourier_id_seq"
 ALTER TABLE "traincourier_id_seq" OWNER TO "postgres";
 
 --
--- TOC entry 2216 (class 0 OID 0)
+-- TOC entry 2217 (class 0 OID 0)
 -- Dependencies: 189
 -- Name: traincourier_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -342,7 +343,7 @@ CREATE SEQUENCE "traincourierroute_id_seq"
 ALTER TABLE "traincourierroute_id_seq" OWNER TO "postgres";
 
 --
--- TOC entry 2217 (class 0 OID 0)
+-- TOC entry 2218 (class 0 OID 0)
 -- Dependencies: 193
 -- Name: traincourierroute_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -385,7 +386,7 @@ CREATE SEQUENCE "user_id_seq"
 ALTER TABLE "user_id_seq" OWNER TO "postgres";
 
 --
--- TOC entry 2218 (class 0 OID 0)
+-- TOC entry 2219 (class 0 OID 0)
 -- Dependencies: 185
 -- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -467,7 +468,7 @@ ALTER TABLE ONLY "user"
 
 
 --
--- TOC entry 2219 (class 0 OID 0)
+-- TOC entry 2220 (class 0 OID 0)
 -- Dependencies: 2059
 -- Name: CONSTRAINT "Email" ON "user"; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -566,7 +567,7 @@ ALTER TABLE ONLY "package"
 
 
 --
--- TOC entry 2082 (class 2606 OID 16573)
+-- TOC entry 2083 (class 2606 OID 16573)
 -- Name: shipment destinationaddress; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -575,7 +576,7 @@ ALTER TABLE ONLY "shipment"
 
 
 --
--- TOC entry 2083 (class 2606 OID 16588)
+-- TOC entry 2084 (class 2606 OID 16588)
 -- Name: shipment externalcourier; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -584,7 +585,7 @@ ALTER TABLE ONLY "shipment"
 
 
 --
--- TOC entry 2084 (class 2606 OID 16568)
+-- TOC entry 2085 (class 2606 OID 16568)
 -- Name: shipment originaddress; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -602,7 +603,7 @@ ALTER TABLE ONLY "package"
 
 
 --
--- TOC entry 2085 (class 2606 OID 16578)
+-- TOC entry 2086 (class 2606 OID 16578)
 -- Name: shipment package; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -629,7 +630,7 @@ ALTER TABLE ONLY "traincourierroute"
 
 
 --
--- TOC entry 2086 (class 2606 OID 16583)
+-- TOC entry 2087 (class 2606 OID 16583)
 -- Name: shipment traincourier; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -646,7 +647,16 @@ ALTER TABLE ONLY "traincourier"
     ADD CONSTRAINT "user" FOREIGN KEY ("userid") REFERENCES "user"("id");
 
 
--- Completed on 2017-06-05 13:36:16
+--
+-- TOC entry 2082 (class 2606 OID 17012)
+-- Name: package user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "package"
+    ADD CONSTRAINT "user" FOREIGN KEY ("userid") REFERENCES "user"("id");
+
+
+-- Completed on 2017-06-05 17:21:56
 
 --
 -- PostgreSQL database dump complete
