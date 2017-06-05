@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class PackageModel {
     public Long id;
-    public UserModel sender;
+    public UserPackageModel sender;
     public Address origin;
     public Address destination;
     public Long weight;
@@ -15,7 +15,7 @@ public class PackageModel {
     public String details;
     public Boolean isDelivered;
     public List<Shipment> shipments;
-    public Traincourier traincourier;
+    public TraincourierModel traincourier;
     public List<Externalcourier> externalcouriers;
 
 }

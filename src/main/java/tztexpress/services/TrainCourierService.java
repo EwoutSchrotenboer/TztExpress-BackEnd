@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tztexpress.models.AvailableTrainCourierModel;
 import tztexpress.models.Traincourier;
+import tztexpress.models.TraincourierModel;
 import tztexpress.models.TraincourierRoute;
 import tztexpress.repositories.TrainCourierRepository;
 
@@ -13,10 +14,12 @@ import java.util.List;
 @Service
 public class TrainCourierService {
     private TrainCourierRepository trainCourierRepository;
+    private UserService userService;
 
     @Autowired
-    public TrainCourierService(TrainCourierRepository trainCourierRepository) {
+    public TrainCourierService(TrainCourierRepository trainCourierRepository, UserService userService) {
         this.trainCourierRepository = trainCourierRepository;
+        this.userService = userService;
     }
 
     public List<Traincourier> listAll() {
@@ -43,5 +46,15 @@ public class TrainCourierService {
             returnValue.traincourierid = availableCourierRoutes.get(0).getTraincourierId();
             return returnValue;
         }
+    }
+
+    public TraincourierModel TraincourierToModel(Traincourier traincourier) {
+        TraincourierModel returnValue = new TraincourierModel();
+        returnValue.email = traincourier.getEmail();
+        returnValue.identification = traincourier.getIdentification();
+        returnValue.vogapproved = traincourier.getVogApproved();
+        returnValue.id = traincourier.getId();
+        returnValue.user = this.userService.UserToPackageModel(this.userService.getById(traincourier.getUserId()));
+        return returnValue;
     }
 }

@@ -247,15 +247,17 @@ public class PackageService {
         returnValue.value = pack.getValue();
         returnValue.isDelivered = pack.getIsDelivered();
 
-        returnValue.sender = this.userService.UserToModel(this.userService.getById(pack.getUserId()));
+        returnValue.sender = this.userService.UserToPackageModel(this.userService.getById(pack.getUserId()));
         returnValue.origin = this.addressService.getAddress(pack.getOriginAddressId());
         returnValue.destination = this.addressService.getAddress(pack.getDestinationAddressId());
         returnValue.shipments = this.shipmentService.getShipmentsForPackage(pack.getId());
 
-        // get couriers from shipments
+        // get couriers from shipment(s)
+        returnValue.externalcouriers = new ArrayList<>();
+
         for(Shipment s : returnValue.shipments) {
-            if (s.getCouriertype() == CourierTypes.TRAINCOURIER.toString()) {
-                returnValue.traincourier = this.trainCourierService.getById(s.getTraincourierId());
+            if (s.getCouriertype().equals(CourierTypes.TRAINCOURIER.toString())) {
+                returnValue.traincourier = this.trainCourierService.TraincourierToModel(this.trainCourierService.getById(s.getTraincourierId()));
             } else {
                 returnValue.externalcouriers.add(this.externalCourierRepository.findOne(s.getExternalcourierId()));
             }
