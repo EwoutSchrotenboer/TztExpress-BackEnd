@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class PackageModel {
     public Long id;
-    public User sender;
+    public UserModel sender;
     public Address origin;
     public Address destination;
     public Long weight;
