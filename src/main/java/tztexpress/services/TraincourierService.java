@@ -8,6 +8,9 @@ import tztexpress.repositories.TraincourierRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A service to get a list, or a single traincourier, or an available courier for a specific route.
+ */
 @Service
 public class TraincourierService {
     private TraincourierRepository traincourierRepository;
@@ -35,10 +38,22 @@ public class TraincourierService {
         return this.modelProviderService.TraincourierToModel(courier);
     }
 
+    /**
+     * Gets a single traincourier
+     * @param id the traincourierId
+     * @return the traincourier
+     */
     public Traincourier getById(long id) {
         return this.traincourierRepository.findOne(id);
     }
 
+    /**
+     * Returns a courier that is available on the given date with the given route-parameters
+     * @param weekday the current weekday
+     * @param originTrainStation the first trainstation of the route
+     * @param destinationTrainStation the last trainstation of the route
+     * @return a model with a boolean if the courier is available, and the courierId if it is.
+     */
     public AvailableTrainCourierModel getTrainCourierForRoute(String weekday, String originTrainStation, String destinationTrainStation) {
         AvailableTrainCourierModel returnValue = new AvailableTrainCourierModel();
 

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The packageservice - creating and showing packages.
+ */
 @Service
 public class PackageService {
 
@@ -58,20 +61,23 @@ public class PackageService {
     }
 
 
-
+    /**
+     * Gets a single package, is not specifically used in any endpoint.
+     * @param id
+     * @return
+     */
     public Package getById(Long id) {
 
         return packageRepository.findOne(id);
     }
 
-    public Package saveOrUpdate(Package _package) {
-        return packageRepository.save(_package);
-    }
-
-    public void delete(Long id) {
-        packageRepository.delete(id);
-    }
-
+    /**
+     * Creates the package, with the current logged on user as the sender
+     * @param packageRequestModel the request model
+     * @param user the user
+     * @return a new package with the given parameters
+     * @throws IllegalArgumentException
+     */
     public Package createPackage(PackageRequestModel packageRequestModel, User user) throws IllegalArgumentException {
         if (packageRequestModel.courierchoicemodel == null) {
             throw new IllegalArgumentException("Route information is not provided.");
@@ -146,8 +152,16 @@ public class PackageService {
         return dbPackage;
     }
 
-    // HACK HACK HACK
-    // FRAGILE, TREAT WITH CARE
+    /**
+     * HACK HACK HACK
+     * FRAGILE, TREAT WITH CARE
+     * Converts a string to an address-model, string is usually similar as it is provided from the google directions
+     * api.
+     * @param addressString the string
+     * @return the addressmodel
+     * @throws IllegalArgumentException if anything can not be converted or is wrong with the data.
+     */
+
     public AddressModel convertStringToAddress(String addressString) throws IllegalArgumentException {
         AddressModel returnValue = new AddressModel();
         returnValue.address1 = new String();
@@ -243,6 +257,11 @@ public class PackageService {
         return returnValue;
     }
 
+    /**
+     * Helperfunction to see if a string is numeric, is needed to parse the zipcode
+     * @param str the string to test
+     * @return true if the string is numeric
+     */
     private boolean isNumeric(String str)
     {
         try
