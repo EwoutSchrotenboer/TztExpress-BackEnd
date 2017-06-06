@@ -6,9 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tztexpress.core.GenericResultHandler;
 import tztexpress.models.GenericResult;
-import tztexpress.models.Traincourier;
+import tztexpress.models.TraincourierModel;
 import tztexpress.services.AuthenticationService;
-import tztexpress.services.TrainCourierService;
+import tztexpress.services.TraincourierService;
 
 import java.util.List;
 
@@ -20,11 +20,11 @@ import java.util.List;
 @RequestMapping("/api/courier")
 public class TrainCourierController
 {
-    private TrainCourierService trainCourierService;
+    private TraincourierService traincourierService;
 
     @Autowired
-    public TrainCourierController(TrainCourierService trainCourierService) {
-        this.trainCourierService = trainCourierService;
+    public TrainCourierController(TraincourierService traincourierService) {
+        this.traincourierService = traincourierService;
     }
 
     /**
@@ -34,10 +34,10 @@ public class TrainCourierController
      */
     @RequestMapping(value = "/couriers", method = RequestMethod.GET)
     public @ResponseBody
-    GenericResult<List<Traincourier>> listTrainCouriers(@RequestHeader HttpHeaders headers)
+    GenericResult<List<TraincourierModel>> listTrainCouriers(@RequestHeader HttpHeaders headers)
     {
         if(AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication"))) {
-            return GenericResultHandler.GenericResult(trainCourierService.listAll());
+            return GenericResultHandler.GenericResult(traincourierService.listAll());
         } else {
             return GenericResultHandler.GenericExceptionResult("Invalid authentication token");
         }
@@ -51,11 +51,11 @@ public class TrainCourierController
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    GenericResult<Traincourier> getTrainCourier(@RequestHeader HttpHeaders headers, @PathVariable String id)
+    GenericResult<TraincourierModel> getTrainCourier(@RequestHeader HttpHeaders headers, @PathVariable String id)
     {
         if (AuthenticationService.ValidateToken(headers.getValuesAsList("Authentication")))
         {
-            return GenericResultHandler.GenericResult(trainCourierService.getById(Long.valueOf(id)));
+            return GenericResultHandler.GenericResult(traincourierService.getModelById(Long.valueOf(id)));
         }
         else {
             return GenericResultHandler.GenericExceptionResult("Invalid authentication token");

@@ -7,7 +7,7 @@ import tztexpress.models.TraincourierRoute;
 
 import java.util.List;
 
-public interface TrainCourierRepository extends CrudRepository<Traincourier, Long> {
+public interface TraincourierRepository extends CrudRepository<Traincourier, Long> {
 
     @Query("select tcr from TraincourierRoute tcr, Route r " +
             "where tcr.routeId = r.id " +

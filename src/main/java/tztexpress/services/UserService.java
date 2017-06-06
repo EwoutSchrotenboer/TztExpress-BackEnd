@@ -119,30 +119,4 @@ public class UserService {
         return userRepository.save(user);
 
     }
-
-    public UserModel UserToModel(User user) {
-        UserModel returnValue = new UserModel();
-
-        returnValue.email = user.getEmail();
-        returnValue.firstname = user.getFirstName();
-        returnValue.lastname = user.getLastName();
-        returnValue.prefix = user.getPrefix();
-        returnValue.email = user.getEmail().toLowerCase();
-        returnValue.addressid = user.getAddressId();
-
-        return returnValue;
-    }
-
-    public UserPackageModel UserToPackageModel(User user) {
-        UserPackageModel returnValue = new UserPackageModel();
-
-        returnValue.email = user.getEmail();
-        returnValue.firstname = user.getFirstName();
-        returnValue.lastname = user.getLastName();
-        returnValue.prefix = user.getPrefix();
-        returnValue.email = user.getEmail().toLowerCase();
-        returnValue.address = addressService.getAddress(user.getAddressId());
-
-        return returnValue;
-    }
 }

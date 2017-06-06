@@ -10,7 +10,7 @@ import tztexpress.enumerators.BiggestCities;
 import tztexpress.enumerators.CourierTypes;
 import tztexpress.enumerators.Status;
 import tztexpress.models.*;
-import tztexpress.services.TrainCourierService;
+import tztexpress.services.TraincourierService;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,13 +40,13 @@ public class RouteRepository {
      */
     private static final int MAXIMUMBICYCLEDISTANCECHEAPEST = 4000;
 
-    private TrainCourierService trainCourierService;
+    private TraincourierService traincourierService;
 
     /**
      * Initialize the repositories.RouteRepository
      */
     @Autowired
-    public RouteRepository(TrainCourierService trainCourierService) {
+    public RouteRepository(TraincourierService traincourierService) {
         this.context = context
                 .setQueryRateLimit(3)
                 .setConnectTimeout(1, TimeUnit.SECONDS)
@@ -54,7 +54,7 @@ public class RouteRepository {
                 .setWriteTimeout(1, TimeUnit.SECONDS)
                 .setApiKey("AIzaSyBdz5GYyufanHNIWY8QKnRqLKZuVlnxRYc");
 
-        this.trainCourierService = trainCourierService;
+        this.traincourierService = traincourierService;
     }
 
     /**
@@ -136,7 +136,7 @@ public class RouteRepository {
 
             // Check if trainCourier is available for route
             if (trainCourier.traincourier.originaddress != null && trainCourier.traincourier.destinationaddress != null) {
-                AvailableTrainCourierModel availableCourier = this.trainCourierService.getTrainCourierForRoute(weekDay, trainCourier.traincourier.originaddress, trainCourier.traincourier.destinationaddress);
+                AvailableTrainCourierModel availableCourier = this.traincourierService.getTrainCourierForRoute(weekDay, trainCourier.traincourier.originaddress, trainCourier.traincourier.destinationaddress);
                 if (availableCourier.isavailable) {
                     trainCourier.traincourier.traincourierdbid = availableCourier.traincourierid;
                     courierModelArrayList.add(trainCourier);
