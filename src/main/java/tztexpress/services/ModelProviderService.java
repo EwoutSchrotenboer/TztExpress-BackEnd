@@ -150,6 +150,7 @@ public class ModelProviderService {
         returnValue.details = pack.getDetails();
         returnValue.value = pack.getValue();
         returnValue.isDelivered = pack.getIsDelivered();
+        returnValue.weight = pack.getWeight();
 
         returnValue.sender = this.UserToPackageModel(this.userService.getById(pack.getUserId()));
         returnValue.origin = this.addressService.getAddress(pack.getOriginAddressId());
