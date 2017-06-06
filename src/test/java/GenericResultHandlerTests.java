@@ -12,16 +12,16 @@ public class GenericResultHandlerTests {
     public void GenericResultTest() {
         // arrange
         CourierModel testModel = new CourierModel();
-        testModel.Available = true;
-        testModel.Cost = 5.0;
-        testModel.IsCheapestOption = true;
+        testModel.available = true;
+        testModel.cost = 5.0;
+        testModel.ischeapestoption = true;
 
         // act
         GenericResult<CourierModel> testResult = GenericResultHandler.GenericResult(testModel);
         // assert
-        Assert.assertEquals(true, testResult.IsSuccess);
-        Assert.assertEquals(testModel, testResult.Model);
-        Assert.assertNull(testResult.Exception);
+        Assert.assertEquals(true, testResult.issuccess);
+        Assert.assertEquals(testModel, testResult.model);
+        Assert.assertNull(testResult.exception);
 
     }
 
@@ -33,18 +33,18 @@ public class GenericResultHandlerTests {
         // act
         GenericResult<CourierModel> testResult = GenericResultHandler.<CourierModel>GenericExceptionResult(exceptionMessage);
         // assert
-        Assert.assertEquals(false, testResult.IsSuccess);
-        Assert.assertNull(testResult.Model);
+        Assert.assertEquals(false, testResult.issuccess);
+        Assert.assertNull(testResult.model);
 
         // Debugmode should return more information:
         if(java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("-agentlib:jdwp") > 0) {
-            Assert.assertEquals(exceptionMessage, testResult.Exception.Message);
-            Assert.assertNotNull(testResult.Exception.Exception);
-            Assert.assertNotNull(testResult.Exception.StackTrace);
+            Assert.assertEquals(exceptionMessage, testResult.exception.message);
+            Assert.assertNotNull(testResult.exception.exception);
+            Assert.assertNotNull(testResult.exception.stacktrace);
         } else {
-            Assert.assertEquals("An error has occurred, please contact support.", testResult.Exception.Message);
-            Assert.assertNull(testResult.Exception.Exception);
-            Assert.assertNull(testResult.Exception.StackTrace);
+            Assert.assertEquals("An error has occurred, please contact support.", testResult.exception.message);
+            Assert.assertNull(testResult.exception.exception);
+            Assert.assertNull(testResult.exception.stacktrace);
         }
 
     }
@@ -57,18 +57,18 @@ public class GenericResultHandlerTests {
         // act
         GenericResult<CourierModel> testResult = GenericResultHandler.<CourierModel>GenericExceptionResult(ex);
         // assert
-        Assert.assertEquals(false, testResult.IsSuccess);
-        Assert.assertNull(testResult.Model);
+        Assert.assertEquals(false, testResult.issuccess);
+        Assert.assertNull(testResult.model);
 
         // Debugmode should return more information:
         if(java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("-agentlib:jdwp") > 0) {
-            Assert.assertEquals(ex.getMessage(), testResult.Exception.Message);
-            Assert.assertNotNull(testResult.Exception.Exception);
-            Assert.assertNotNull(testResult.Exception.StackTrace);
+            Assert.assertEquals(ex.getMessage(), testResult.exception.message);
+            Assert.assertNotNull(testResult.exception.exception);
+            Assert.assertNotNull(testResult.exception.stacktrace);
         } else {
-            Assert.assertEquals("An error has occurred, please contact support.", testResult.Exception.Message);
-            Assert.assertNull(testResult.Exception.Exception);
-            Assert.assertNull(testResult.Exception.StackTrace);
+            Assert.assertEquals("An error has occurred, please contact support.", testResult.exception.message);
+            Assert.assertNull(testResult.exception.exception);
+            Assert.assertNull(testResult.exception.stacktrace);
         }
 
     }
