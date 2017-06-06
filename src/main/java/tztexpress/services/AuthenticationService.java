@@ -132,8 +132,6 @@ public class AuthenticationService {
             return null;
         }
 
-        Map<String, String> authenticationElements = new HashMap<String, String>();
-
         // We can assume here that the string is always in the right order.
         String[] stringArray = authString.split(":");
 

@@ -17,23 +17,26 @@ public class PackageService {
     private PackageRepository packageRepository;
     private ShipmentService shipmentService;
     private AddressService addressService;
-    private TrainCourierService trainCourierService;
     private UserService userService;
+    private TraincourierService traincourierService;
     private ExternalCourierRepository externalCourierRepository;
+    private ModelProviderService modelProviderService;
 
     @Autowired
     public PackageService(PackageRepository packageRepository,
                           AddressService addressService,
                           ShipmentService shipmentService,
-                          TrainCourierService trainCourierService,
+                          ModelProviderService modelProviderService,
                           ExternalCourierRepository externalCourierRepository,
-                          UserService userService) {
+                          UserService userService,
+                          TraincourierService traincourierService) {
         this.packageRepository = packageRepository;
         this.addressService = addressService;
         this.shipmentService = shipmentService;
-        this.trainCourierService = trainCourierService;
+        this.modelProviderService = modelProviderService;
         this.externalCourierRepository = externalCourierRepository;
         this.userService = userService;
+        this.traincourierService = traincourierService;
     }
 
     /**
@@ -253,31 +256,9 @@ public class PackageService {
         return true;
     }
 
-    public PackageModel getPackageModel(Long id) {
-        PackageModel returnValue = new PackageModel();
-        Package pack = this.getById(id);
-        returnValue.id = pack.getId();
-        returnValue.details = pack.getDetails();
-        returnValue.value = pack.getValue();
-        returnValue.isDelivered = pack.getIsDelivered();
-
-        returnValue.sender = this.userService.UserToPackageModel(this.userService.getById(pack.getUserId()));
-        returnValue.origin = this.addressService.getAddress(pack.getOriginAddressId());
-        returnValue.destination = this.addressService.getAddress(pack.getDestinationAddressId());
-        returnValue.shipments = this.shipmentService.getShipmentsForPackage(pack.getId());
-
-        // get couriers from shipment(s)
-        returnValue.externalcouriers = new ArrayList<>();
-
-        for(Shipment s : returnValue.shipments) {
-            if (s.getCouriertype().equals(CourierTypes.TRAINCOURIER.toString())) {
-                returnValue.traincourier = this.trainCourierService.TraincourierToModel(this.trainCourierService.getById(s.getTraincourierId()));
-            } else {
-                returnValue.externalcouriers.add(this.externalCourierRepository.findOne(s.getExternalcourierId()));
-            }
-        }
-
-        return returnValue;
-
+    public PackageModel getPackageModel(long packageId) {
+        Package pack = this.getById(packageId);
+        return this.modelProviderService.PackageToModel(pack);
     }
+
 }
