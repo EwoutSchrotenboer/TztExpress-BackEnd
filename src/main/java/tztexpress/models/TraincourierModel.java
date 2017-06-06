@@ -11,5 +11,5 @@ public class TraincourierModel {
     public String identification;
     public String email;
     public UserPackageModel user;
-    public List<Package> packages;
+    public List<PackageModel> packages;
 }
