@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 import tztexpress.enumerators.CourierTypes;
 import tztexpress.models.*;
 import tztexpress.models.Package;
-import tztexpress.repositories.ExternalCourierRepository;
-import tztexpress.repositories.PackageRepository;
-import tztexpress.repositories.TraincourierRepository;
+import tztexpress.repositories.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +22,7 @@ public class ModelProviderService {
     private ExternalCourierRepository externalCourierRepository;
     private TraincourierRepository traincourierRepository;
     private ShipmentService shipmentService;
+    private TraincourierRouteRepository traincourierRouteRepository;
 
     @Autowired
     public ModelProviderService(UserService userService,
@@ -31,13 +30,16 @@ public class ModelProviderService {
                                 AddressService addressService,
                                 ExternalCourierRepository externalCourierRepository,
                                 ShipmentService shipmentService,
-                                TraincourierRepository traincourierRepository) {
+                                TraincourierRepository traincourierRepository,
+                                TraincourierRouteRepository traincourierRouteRepository) {
         this.userService = userService;
         this.packageRepository = packageRepository;
         this.addressService = addressService;
         this.externalCourierRepository = externalCourierRepository;
         this.shipmentService = shipmentService;
         this.traincourierRepository = traincourierRepository;
+        this.traincourierRouteRepository = traincourierRouteRepository;
+
     }
 
     /**
@@ -48,6 +50,7 @@ public class ModelProviderService {
     public TraincourierModel TraincourierToModel(Traincourier traincourier) {
         TraincourierModel returnValue = new TraincourierModel();
         List<Package> packages = this.packageRepository.getPackagesForTrainCourier(traincourier.getId());
+        List<TraincourierRoute> routes = this.traincourierRouteRepository.getRoutesForTrainCourier(traincourier.getId());
         returnValue.email = traincourier.getEmail();
         returnValue.identification = traincourier.getIdentification();
         returnValue.vogapproved = traincourier.getVogApproved();
@@ -58,6 +61,25 @@ public class ModelProviderService {
         for(Package pack : packages) {
             returnValue.packages.add(this.PackageToModel(pack));
         }
+
+        returnValue.routes = new ArrayList<>();
+        for(TraincourierRoute route : routes) {
+            returnValue.routes.add(this.TraincourierRouteToModel(route));
+        }
+
+        return returnValue;
+    }
+
+    /**
+     * Converts a traincourierRoute to a model
+     * @param traincourierRoute the traincourierroute
+     * @return the model
+     */
+    public TraincourierRouteModel TraincourierRouteToModel(TraincourierRoute traincourierRoute) {
+        TraincourierRouteModel returnValue = new TraincourierRouteModel();
+        returnValue.traincourierid = traincourierRoute.getTraincourierId();
+        returnValue.weekday = traincourierRoute.getDay();
+        returnValue.route = this.traincourierRouteRepository.getRouteById(traincourierRoute.getRouteId());
 
         return returnValue;
     }
