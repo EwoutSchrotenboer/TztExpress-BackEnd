@@ -12,4 +12,5 @@ public class TraincourierModel {
     public String email;
     public UserPackageModel user;
     public List<PackageModel> packages;
+    public List<TraincourierRouteModel> routes;
 }
