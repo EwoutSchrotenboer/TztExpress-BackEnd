@@ -11,6 +11,8 @@ import java.util.List;
  * Contains the data to adjust Packages in the database.
  */
 public interface PackageRepository extends CrudRepository<Package, Long> {
-    @Query("select p from Package p join Shipment s on p.id = s.packageId where s.traincourierId = ?1")
+    @Query("select p from Package p, Shipment s " +
+            "where p.id = s.packageId " +
+            "and s.traincourierId = ?1")
     List<Package> getPackagesForTrainCourier(Long traincourierId);
 }

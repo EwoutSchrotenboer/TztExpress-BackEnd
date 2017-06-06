@@ -15,7 +15,7 @@ public class PackageModel {
     public String details;
     public Boolean isDelivered;
     public List<Shipment> shipments;
-    public TraincourierModel traincourier;
+    public TraincourierPackageModel traincourier;
     public List<Externalcourier> externalcouriers;
 
 }

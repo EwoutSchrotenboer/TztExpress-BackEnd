@@ -23,6 +23,7 @@ public class ModelProviderService {
     private TraincourierRepository traincourierRepository;
     private ShipmentService shipmentService;
     private TraincourierRouteRepository traincourierRouteRepository;
+    private RouteRepository routeRepository;
 
     @Autowired
     public ModelProviderService(UserService userService,
@@ -31,7 +32,8 @@ public class ModelProviderService {
                                 ExternalCourierRepository externalCourierRepository,
                                 ShipmentService shipmentService,
                                 TraincourierRepository traincourierRepository,
-                                TraincourierRouteRepository traincourierRouteRepository) {
+                                TraincourierRouteRepository traincourierRouteRepository,
+                                RouteRepository routeRepository) {
         this.userService = userService;
         this.packageRepository = packageRepository;
         this.addressService = addressService;
@@ -39,6 +41,7 @@ public class ModelProviderService {
         this.shipmentService = shipmentService;
         this.traincourierRepository = traincourierRepository;
         this.traincourierRouteRepository = traincourierRouteRepository;
+        this.routeRepository = routeRepository;
 
     }
 
@@ -71,6 +74,21 @@ public class ModelProviderService {
     }
 
     /**
+     * Creates a traincouriermodel from a traincourier
+     * @param traincourier the object to convert to a model
+     * @return the traincourier model
+     */
+    public TraincourierPackageModel TraincourierToPackageModel(Traincourier traincourier) {
+        TraincourierPackageModel returnValue = new TraincourierPackageModel();
+        returnValue.email = traincourier.getEmail();
+        returnValue.identification = traincourier.getIdentification();
+        returnValue.vogapproved = traincourier.getVogApproved();
+        returnValue.id = traincourier.getId();
+        returnValue.user = this.UserToPackageModel(this.userService.getById(traincourier.getUserId()));
+        return returnValue;
+    }
+
+    /**
      * Converts a traincourierRoute to a model
      * @param traincourierRoute the traincourierroute
      * @return the model
@@ -79,7 +97,7 @@ public class ModelProviderService {
         TraincourierRouteModel returnValue = new TraincourierRouteModel();
         returnValue.traincourierid = traincourierRoute.getTraincourierId();
         returnValue.weekday = traincourierRoute.getDay();
-        returnValue.route = this.traincourierRouteRepository.getRouteById(traincourierRoute.getRouteId());
+        returnValue.route = this.routeRepository.findOne(traincourierRoute.getRouteId());
 
         return returnValue;
     }
@@ -142,7 +160,7 @@ public class ModelProviderService {
         returnValue.externalcouriers = new ArrayList<>();
         for(Shipment s : returnValue.shipments) {
             if (s.getCouriertype().equals(CourierTypes.TRAINCOURIER.toString())) {
-                returnValue.traincourier = this.TraincourierToModel(this.traincourierRepository.findOne(s.getTraincourierId()));
+                returnValue.traincourier = this.TraincourierToPackageModel(this.traincourierRepository.findOne(s.getTraincourierId()));
             } else {
                 returnValue.externalcouriers.add(this.externalCourierRepository.findOne(s.getExternalcourierId()));
             }

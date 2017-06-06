@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/route")
 public class RouteController {
-    private RouteRepository routeRepository;
+    private RouteService routeService;
 
     @Autowired
-    public RouteController(RouteRepository routeRepository) {
-        this.routeRepository = routeRepository;
+    public RouteController(RouteService routeService) {
+        this.routeService = routeService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -26,7 +26,7 @@ public class RouteController {
         if (isValid) {
             if (request.origin != null && request.destination != null) {
                 try {
-                    return GenericResultHandler.GenericResult(this.routeRepository.CalculateRoute(request.origin, request.destination));
+                    return GenericResultHandler.GenericResult(this.routeService.CalculateRoute(request.origin, request.destination));
                 } catch (Exception e) {
                     return GenericResultHandler.GenericExceptionResult(e);
                 }
