@@ -15,9 +15,10 @@ If you've set up Docker and gradle you can run the project as followed:
 
 ### Connecting to local postgres database
 
-If you want to connect to the local postgres database you should use the
-`postgres` as username and leave the password blank (Postgres is using it's
+If you want to connect to the local postgres database you should use
+`postgres` as username and password. (Postgres is using it's
 default port `5432`).
+A default database-schema is included in `src/main/resources/databasesetup.sql`
 
 ## Running
 
@@ -31,7 +32,3 @@ To run the application you should use `gradle bootRun`.
 ### Docker
 
 To run the application you should use `docker-compose up api db`.
-
-## Testing
-
-In order to test this project you should use `gradle test`
